@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Relic Ring Protocol - Universe Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-container": "#b85d00",
+                        "danger-red": "#F04438",
+                        "surface": "#0f1321",
+                        "surface-tint": "#c5c0ff",
+                        "outline-variant": "#474555",
+                        "primary": "#c5c0ff",
+                        "border-white": "rgba(255, 255, 255, 0.1)",
+                        "surface-container-highest": "#303444",
+                        "warning-gold": "#FFB020",
+                        "secondary-container": "#00a6e0",
+                        "primary-container": "#6d5ef9",
+                        "surface-card": "#0B1020",
+                        "inverse-primary": "#5543e0",
+                        "inverse-on-surface": "#2c303f",
+                        "surface-container-lowest": "#0a0d1c",
+                        "on-tertiary-container": "#fffeff",
+                        "secondary": "#7bd0ff",
+                        "on-background": "#dfe1f6",
+                        "on-secondary": "#00354a",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#001e2c",
+                        "outline": "#928ea1",
+                        "background": "#0f1321",
+                        "on-tertiary": "#502500",
+                        "on-surface-variant": "#c8c4d8",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#262939",
+                        "on-secondary-container": "#00374d",
+                        "inverse-surface": "#dfe1f6",
+                        "on-primary-fixed-variant": "#3c21c8",
+                        "on-primary": "#2500a1",
+                        "success-green": "#00D084",
+                        "surface-container-low": "#171b2a",
+                        "surface-bright": "#353849",
+                        "surface-dim": "#0f1321",
+                        "primary-fixed": "#e4dfff",
+                        "on-tertiary-fixed": "#301400",
+                        "on-primary-fixed": "#140067",
+                        "on-primary-container": "#ffffff",
+                        "tertiary": "#ffb785",
+                        "tertiary-fixed": "#ffdcc6",
+                        "surface-container": "#1b1f2e",
+                        "on-tertiary-fixed-variant": "#713700",
+                        "surface-variant": "#303444",
+                        "tertiary-fixed-dim": "#ffb785",
+                        "secondary-fixed": "#c4e7ff",
+                        "primary-fixed-dim": "#c5c0ff",
+                        "secondary-fixed-dim": "#7bd0ff",
+                        "on-error-container": "#ffdad6",
+                        "on-surface": "#dfe1f6",
+                        "on-secondary-fixed-variant": "#004c69",
+                        "error": "#ffb4ab"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "widget-padding": "24px",
+                        "gutter": "16px",
+                        "grid-margin": "32px",
+                        "compact-padding": "12px"
+                    },
+                    fontFamily: {
+                        "headline-sm": ["Space Grotesk"],
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-lg": ["Space Grotesk"],
+                        "data-mono": ["JetBrains Mono"]
+                    },
+                    fontSize: {
+                        "headline-sm": ["20px", { lineHeight: "1.4", fontWeight: "500" }],
+                        "body-sm": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "label-caps": ["11px", { lineHeight: "1", letterSpacing: "0.1em", fontWeight: "700" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", fontWeight: "600" }],
+                        "data-mono": ["14px", { lineHeight: "1.2", letterSpacing: "0.05em", fontWeight: "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(11, 16, 32, 0.4);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .micro-glow:hover {
+            box-shadow: 0 0 20px rgba(197, 192, 255, 0.2);
+            border-color: rgba(197, 192, 255, 0.5);
+        }
+
+        .node-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(197, 192, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(197, 192, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(197, 192, 255, 0); }
+        }
+
+        .link-dash {
+            stroke-dasharray: 10;
+            animation: dash 20s linear infinite;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -1000; }
+        }
+        
+        /* Glass Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface overflow-hidden h-screen w-screen relative">
+<!-- Background Shader -->
+<!-- STITCH_SHADER_START:ANIMATION_1 class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-60" -->
+<div class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-60" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_1" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_1');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+float hash(vec2 p) {
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y);
+}
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution;
+    vec3 color = vec3(0.02, 0.03, 0.08); // Deep space base
+    
+    // Star field
+    vec2 st = uv * 200.0;
+    vec2 ipos = floor(st);
+    if (hash(ipos) > 0.995) {
+        float blink = 0.5 + 0.5 * sin(u_time * 2.0 + hash(ipos) * 10.0);
+        color += vec3(1.0) * blink;
+    }
+    
+    // Subtle nebula glow
+    float nebula = 0.05 * sin(uv.x * 2.0 + u_time * 0.1) + 0.05 * cos(uv.y * 3.0 - u_time * 0.1);
+    color += vec3(0.1, 0.05, 0.2) * nebula;
+
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_1 -->
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full z-50 flex flex-col bg-surface/40 backdrop-blur-xl h-screen w-64 border-r border-border-white border-r border-white/10 shadow-[0_0_20px_0_rgba(197,192,255,0.05)]">
+<div class="p-6 border-b border-border-white/20">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/20 border border-primary/50 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">public</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm tracking-tighter text-primary">RELIC RING</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant mt-1">Interplanetary v2.4</p>
+</div>
+</div>
+</div>
+<div class="flex-1 py-4 flex flex-col gap-1 overflow-y-auto">
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary border-r-2 border-primary transition-all duration-300 ease-in-out font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Universe Dashboard</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md transition-all duration-300 ease-in-out font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">simulation</span>
+<span>Packet Simulator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md transition-all duration-300 ease-in-out font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">route</span>
+<span>Packet Journey</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md transition-all duration-300 ease-in-out font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Latency Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md transition-all duration-300 ease-in-out font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">translate</span>
+<span>Codex Translator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md transition-all duration-300 ease-in-out font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span>Network Control</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 z-40 flex justify-between items-center px-grid-margin bg-surface/30 backdrop-blur-lg h-16 w-full border-b border-border-white backdrop-blur-md border-b border-white/10" style="width: calc(100% - 16rem);">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-card border border-border-white rounded text-on-surface font-data-mono text-data-mono pl-10 pr-4 py-1.5 focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary/50 w-64 transition-all" placeholder="Search coordinates..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-all duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:text-primary transition-all duration-200">
+<span class="material-symbols-outlined">terminal</span>
+</button>
+<button class="hover:text-primary transition-all duration-200">
+<span class="material-symbols-outlined">account_tree</span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="A futuristic sci-fi styled profile portrait of a commander, moody blue and purple neon lighting, highly detailed tech suit, glassmorphic UI elements floating around, dark aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9aScXGXrH2aY0t613lABb_JzcANHfJO6-Tq8OwXvE_VN-S44FF5X1sdm5kwdjnZOp6H-1hH7hcg36w4MF_fh6qGgEIH2QoKQsUjhr1-xa6bxT1h9Iw3T1wvB1q6NgzOgpcAI3CB7fMByqIRcAiexvahk7BT8YAaPM8Tcwrpl-utQSF2LLO6zVcPVIG7QIvzzfyhqsLJ1C4RcuaAttyK5z8K3e-GjDm22EMTyu8jx40i6AmMdVAlnATXUQGKa4fAwEUdqaHGP7_jA6"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="absolute inset-0 pl-64 pt-16 flex flex-row z-10 p-gutter gap-gutter h-full">
+<!-- Universe Map Canvas (Center) -->
+<section class="flex-1 glass-panel rounded-xl relative overflow-hidden flex flex-col">
+<!-- Map Header -->
+<div class="p-4 border-b border-border-white/30 flex justify-between items-center z-20 bg-surface-card/50">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Telemetry Sector: Alpha</h2>
+<div class="flex gap-2">
+<button class="p-1.5 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-sm">zoom_in</span>
+</button>
+<button class="p-1.5 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-sm">zoom_out</span>
+</button>
+<button class="p-1.5 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-sm">filter_center_focus</span>
+</button>
+</div>
+</div>
+<!-- Map Area -->
+<div class="flex-1 relative w-full h-full cursor-move" id="map-container">
+<!-- Links (SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none">
+<!-- Aegis to Boreas -->
+<line stroke="#c5c0ff" stroke-opacity="0.3" stroke-width="2" x1="20%" x2="50%" y1="30%" y2="20%"></line>
+<!-- Boreas to Dawn -->
+<line class="link-dash" stroke="#00a6e0" stroke-opacity="0.6" stroke-width="2" x1="50%" x2="80%" y1="20%" y2="40%"></line>
+<!-- Dawn to Elysium -->
+<line stroke="#c5c0ff" stroke-opacity="0.2" stroke-width="1" x1="80%" x2="70%" y1="40%" y2="70%"></line>
+<!-- Elysium to Fenix -->
+<line stroke="#c5c0ff" stroke-opacity="0.3" stroke-width="2" x1="70%" x2="40%" y1="70%" y2="80%"></line>
+<!-- Fenix to Aegis -->
+<line stroke="#c5c0ff" stroke-opacity="0.3" stroke-width="2" x1="40%" x2="20%" y1="80%" y2="30%"></line>
+<!-- Central Hub Caelum to all -->
+<line class="link-dash" stroke="#00D084" stroke-opacity="0.5" stroke-width="1.5" x1="50%" x2="20%" y1="50%" y2="30%"></line>
+<line class="link-dash" stroke="#00D084" stroke-opacity="0.5" stroke-width="1.5" x1="50%" x2="50%" y1="50%" y2="20%"></line>
+<line class="link-dash" stroke="#00D084" stroke-opacity="0.5" stroke-width="1.5" x1="50%" x2="80%" y1="50%" y2="40%"></line>
+<line class="link-dash" stroke="#00D084" stroke-opacity="0.5" stroke-width="1.5" x1="50%" x2="70%" y1="50%" y2="70%"></line>
+<line class="link-dash" stroke="#00D084" stroke-opacity="0.5" stroke-width="1.5" x1="50%" x2="40%" y1="50%" y2="80%"></line>
+</svg>
+<!-- Nodes -->
+<!-- Aegis -->
+<div class="absolute left-[20%] top-[30%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer">
+<div class="w-4 h-4 rounded-full bg-primary/80 border-2 border-primary node-pulse shadow-[0_0_15px_rgba(197,192,255,0.6)] group-hover:scale-125 transition-transform"></div>
+<span class="mt-2 font-label-caps text-label-caps text-on-surface bg-surface/80 px-2 py-0.5 rounded border border-border-white backdrop-blur-sm">AEGIS</span>
+</div>
+<!-- Boreas -->
+<div class="absolute left-[50%] top-[20%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer">
+<div class="w-5 h-5 rounded-full bg-secondary/80 border-2 border-secondary shadow-[0_0_20px_rgba(123,208,255,0.8)] group-hover:scale-125 transition-transform"></div>
+<span class="mt-2 font-label-caps text-label-caps text-on-surface bg-surface/80 px-2 py-0.5 rounded border border-border-white backdrop-blur-sm">BOREAS</span>
+</div>
+<!-- Dawn -->
+<div class="absolute left-[80%] top-[40%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer">
+<div class="w-3 h-3 rounded-full bg-warning-gold/80 border-2 border-warning-gold shadow-[0_0_10px_rgba(255,176,32,0.6)] group-hover:scale-125 transition-transform"></div>
+<span class="mt-2 font-label-caps text-label-caps text-on-surface bg-surface/80 px-2 py-0.5 rounded border border-border-white backdrop-blur-sm">DAWN</span>
+</div>
+<!-- Elysium -->
+<div class="absolute left-[70%] top-[70%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer">
+<div class="w-4 h-4 rounded-full bg-primary/50 border-2 border-primary shadow-[0_0_10px_rgba(197,192,255,0.4)] group-hover:scale-125 transition-transform"></div>
+<span class="mt-2 font-label-caps text-label-caps text-on-surface bg-surface/80 px-2 py-0.5 rounded border border-border-white backdrop-blur-sm">ELYSIUM</span>
+</div>
+<!-- Fenix -->
+<div class="absolute left-[40%] top-[80%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer">
+<div class="w-4 h-4 rounded-full bg-danger-red/80 border-2 border-danger-red shadow-[0_0_15px_rgba(240,68,56,0.6)] node-pulse group-hover:scale-125 transition-transform"></div>
+<span class="mt-2 font-label-caps text-label-caps text-on-surface bg-surface/80 px-2 py-0.5 rounded border border-border-white backdrop-blur-sm text-danger-red">FENIX (WARN)</span>
+</div>
+<!-- Caelum (Center) -->
+<div class="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer z-10" onclick="document.getElementById('planet-details').classList.remove('translate-x-full');">
+<div class="w-8 h-8 rounded-full bg-success-green/20 border-2 border-success-green flex items-center justify-center shadow-[0_0_30px_rgba(0,208,132,0.5)] group-hover:bg-success-green/40 transition-colors">
+<div class="w-3 h-3 rounded-full bg-success-green"></div>
+</div>
+<span class="mt-2 font-label-caps text-label-caps text-success-green bg-success-green/10 px-3 py-1 rounded border border-success-green/50 backdrop-blur-md font-bold">CAELUM (HUB)</span>
+</div>
+</div>
+<!-- Planet Details Slide-out -->
+<div class="absolute right-0 top-0 bottom-0 w-80 glass-panel border-l border-white/10 transform translate-x-full transition-transform duration-500 ease-in-out z-30 flex flex-col bg-surface-card/90" id="planet-details">
+<div class="p-4 border-b border-white/10 flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-success-green"></span>
+                        Caelum
+                    </h3>
+<button class="text-on-surface-variant hover:text-white" onclick="document.getElementById('planet-details').classList.add('translate-x-full');">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<div class="p-6 flex-1 flex flex-col gap-6">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">CODEX VERSION</p>
+<p class="font-data-mono text-data-mono text-secondary">Base 8 - v2.4.1</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">COORDINATES</p>
+<p class="font-data-mono text-data-mono text-primary">SEC-7A: 142.89 / 44.1</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">TOWER COUNT</p>
+<div class="flex items-center gap-2">
+<span class="font-display-lg text-display-lg text-on-surface">1,024</span>
+<span class="text-success-green text-xs flex items-center"><span class="material-symbols-outlined text-xs">arrow_upward</span> 12%</span>
+</div>
+</div>
+<div class="mt-auto">
+<button class="w-full py-2 bg-primary-container text-on-primary-container rounded font-label-caps text-label-caps hover:bg-inverse-primary transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-sm">settings_input_antenna</span>
+                            INITIATE PING
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Sidebar Statistics (Right) -->
+<aside class="w-80 flex flex-col gap-4 overflow-y-auto pr-2 pb-4">
+<div class="glass-panel rounded-xl p-widget-padding flex flex-col gap-2 micro-glow transition-all">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">TOTAL PLANETS</h3>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-primary">26</span>
+<div class="w-16 h-8 relative">
+<svg class="w-full h-full" viewbox="0 0 100 40">
+<path d="M0,30 Q20,30 30,20 T60,25 T100,10" fill="none" stroke="#c5c0ff" stroke-width="2"></path>
+<circle cx="100" cy="10" fill="#c5c0ff" r="3"></circle>
+</svg>
+</div>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-widget-padding flex flex-col gap-2 micro-glow transition-all">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">ONLINE NODES</h3>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-secondary">24</span>
+<span class="text-success-green font-data-mono text-data-mono bg-success-green/10 px-2 py-1 rounded border border-success-green/20 text-xs">92%</span>
+</div>
+<div class="w-full h-1 bg-surface-container-highest rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-secondary w-[92%] rounded-full shadow-[0_0_10px_rgba(123,208,255,0.8)]"></div>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-widget-padding flex flex-col gap-2 micro-glow transition-all">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">AVG LATENCY</h3>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-warning-gold">142<span class="text-lg text-warning-gold/50 ml-1">ms</span></span>
+<span class="material-symbols-outlined text-warning-gold">speed</span>
+</div>
+<div class="mt-2 h-16 w-full border-b border-l border-white/10 relative flex items-end justify-between px-1">
+<div class="w-2 bg-warning-gold/40 h-[40%] rounded-t hover:bg-warning-gold transition-colors cursor-crosshair"></div>
+<div class="w-2 bg-warning-gold/60 h-[60%] rounded-t hover:bg-warning-gold transition-colors cursor-crosshair"></div>
+<div class="w-2 bg-warning-gold/50 h-[50%] rounded-t hover:bg-warning-gold transition-colors cursor-crosshair"></div>
+<div class="w-2 bg-warning-gold/80 h-[80%] rounded-t hover:bg-warning-gold transition-colors cursor-crosshair"></div>
+<div class="w-2 bg-warning-gold/70 h-[70%] rounded-t hover:bg-warning-gold transition-colors cursor-crosshair"></div>
+<div class="w-2 bg-warning-gold/90 h-[90%] rounded-t shadow-[0_0_10px_rgba(255,176,32,0.8)] hover:bg-warning-gold transition-colors cursor-crosshair"></div>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-widget-padding flex flex-col gap-2 micro-glow transition-all flex-1">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">NETWORK HEALTH</h3>
+<div class="flex items-center justify-center flex-1 relative">
+<!-- Circular Progress -->
+<svg class="w-32 h-32 transform -rotate-90">
+<circle cx="64" cy="64" fill="none" r="54" stroke="rgba(255,255,255,0.05)" stroke-width="8"></circle>
+<circle class="shadow-[0_0_20px_rgba(0,208,132,0.5)]" cx="64" cy="64" fill="none" r="54" stroke="#00D084" stroke-dasharray="339.29" stroke-dashoffset="6.78" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center flex-col">
+<span class="font-display-lg text-display-lg text-success-green">98<span class="text-xl">%</span></span>
+</div>
+</div>
+<div class="flex justify-between text-xs mt-2 font-data-mono text-data-mono text-on-surface-variant border-t border-white/5 pt-2">
+<span>SECTORS: 12/12</span>
+<span class="text-danger-red">ERR: 0.02%</span>
+</div>
+</div>
+</aside>
+</main>
+</body></html>

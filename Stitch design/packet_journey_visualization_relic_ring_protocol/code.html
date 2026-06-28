@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Relic Ring - Packet Journey Visualization</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffdcc6",
+                        "secondary-fixed": "#c4e7ff",
+                        "surface-dim": "#0f1321",
+                        "surface-tint": "#c5c0ff",
+                        "surface-container-low": "#171b2a",
+                        "inverse-surface": "#dfe1f6",
+                        "tertiary": "#ffb785",
+                        "surface-variant": "#303444",
+                        "on-background": "#dfe1f6",
+                        "on-tertiary-container": "#fffeff",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#ffffff",
+                        "surface-container-high": "#262939",
+                        "primary": "#c5c0ff",
+                        "surface-container-lowest": "#0a0d1c",
+                        "surface-container": "#1b1f2e",
+                        "primary-fixed": "#e4dfff",
+                        "on-primary": "#2500a1",
+                        "primary-container": "#6d5ef9",
+                        "outline-variant": "#474555",
+                        "primary-fixed-dim": "#c5c0ff",
+                        "tertiary-container": "#b85d00",
+                        "secondary-container": "#00a6e0",
+                        "on-primary-fixed-variant": "#3c21c8",
+                        "outline": "#928ea1",
+                        "on-surface-variant": "#c8c4d8",
+                        "on-secondary-fixed": "#001e2c",
+                        "on-secondary-fixed-variant": "#004c69",
+                        "on-error": "#690005",
+                        "inverse-on-surface": "#2c303f",
+                        "background": "#0f1321",
+                        "on-tertiary-fixed": "#301400",
+                        "on-tertiary": "#502500",
+                        "tertiary-fixed-dim": "#ffb785",
+                        "surface-bright": "#353849",
+                        "secondary-fixed-dim": "#7bd0ff",
+                        "on-primary-fixed": "#140067",
+                        "warning-gold": "#FFB020",
+                        "surface": "#0f1321",
+                        "on-surface": "#dfe1f6",
+                        "on-error-container": "#ffdad6",
+                        "danger-red": "#F04438",
+                        "border-white": "rgba(255, 255, 255, 0.1)",
+                        "on-secondary-container": "#00374d",
+                        "secondary": "#7bd0ff",
+                        "surface-container-highest": "#303444",
+                        "inverse-primary": "#5543e0",
+                        "on-secondary": "#00354a",
+                        "on-tertiary-fixed-variant": "#713700",
+                        "error": "#ffb4ab",
+                        "success-green": "#00D084",
+                        "surface-card": "#0B1020"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "grid-margin": "32px",
+                        "compact-padding": "12px",
+                        "widget-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "body-sm": ["Inter"],
+                        "headline-sm": ["Space Grotesk"],
+                        "label-caps": ["JetBrains Mono"],
+                        "data-mono": ["JetBrains Mono"],
+                        "body-md": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanline-effect::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(197, 192, 255, 0.05) 51%, transparent 52%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scanline 10s linear infinite;
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 20px 0 rgba(197, 192, 255, 0.2);
+        }
+        .packet-pulse {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 2px #c5c0ff); }
+            50% { filter: drop-shadow(0 0 8px #c5c0ff); }
+        }
+        .glass-panel {
+            background: rgba(15, 19, 33, 0.4);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary/30 overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full z-50 flex flex-col h-screen w-64 border-r border-border-white bg-surface/40 backdrop-blur-xl shadow-[0_0_20px_0_rgba(197,192,255,0.05)]">
+<div class="p-6 flex flex-col gap-1">
+<h1 class="font-headline-sm text-headline-sm tracking-tighter text-primary">RELIC RING</h1>
+<span class="font-label-caps text-[10px] text-on-surface-variant/60">Interplanetary v2.4</span>
+</div>
+<nav class="flex-1 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Universe Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">simulation</span>
+<span class="font-label-caps text-label-caps">Packet Simulator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary border-r-2 border-primary transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">route</span>
+<span class="font-label-caps text-label-caps">Packet Journey</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps">Latency Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">translate</span>
+<span class="font-label-caps text-label-caps">Codex Translator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-label-caps text-label-caps">Network Control</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-white/10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/40 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a futuristic space commander in sleek dark obsidian armor with glowing violet circuitry highlights, cinematic lighting, ultra-detailed textures, science fiction aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFkykJF5Zjbfd1omYfieDoFv_fjCEMXFPDZlX47YYjRxF539jc17xP31ynfUv90x_ibou3vES5tqIz6Zq7wFITgyeg5aMc_NZm09PyzDC41-IVQDa96I7XaS_Weuf3uB9DPjDxG-fkkS-g3NlcYJdQWTGqhmni0wZXe5H7tVflJEUx0ROOghW95XG1hyenozgL9hGYhBwQSmTlXUJgSw7T3SpyGS-LEVrCOipK2cEof0qSW0hgspHJKYdWox6R_pDJH6wOSj60a7_2"/>
+</div>
+<div>
+<div class="font-label-caps text-on-surface text-[12px]">Cmdr. K. Vance</div>
+<div class="text-[10px] text-success-green flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>
+                        Linked to Ring-4
+                    </div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas Area -->
+<main class="ml-64 h-screen relative overflow-hidden bg-surface-container-lowest">
+<!-- Starfield & Atmospheric Background -->
+
+<!-- Header HUD -->
+<header class="absolute top-0 left-0 right-0 h-20 px-grid-margin flex justify-between items-center z-10 backdrop-blur-md border-b border-white/5">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Interplanetary Packet Lifecycle</h2>
+<p class="font-data-mono text-data-mono text-on-surface-variant uppercase">Real-time Protocol Trace :: #RR-882-QX</p>
+</div>
+<div class="flex items-center gap-8">
+<div class="text-right">
+<div class="font-label-caps text-[10px] text-on-surface-variant">ACCUMULATED LATENCY</div>
+<div class="font-data-mono text-headline-sm text-secondary tracking-widest" id="latency-ticker">00:00.342ms</div>
+</div>
+<div class="w-px h-10 bg-white/10"></div>
+<div class="text-right">
+<div class="font-label-caps text-[10px] text-on-surface-variant">CURRENT STATUS</div>
+<div class="font-data-mono text-headline-sm text-success-green">TRANSMITTING VIA LASER</div>
+</div>
+</div>
+</header>
+<!-- Animation Stage -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<!-- Central Journey Visualization -->
+<div class="relative w-full h-[614px] max-w-6xl mx-auto">
+
+<!-- Floating Real-time Telemetry Cards -->
+<!-- Card: Atmospheric Tower -->
+<div class="absolute top-[10%] left-[15%] glass-panel p-4 w-48 rounded-lg animate-bounce [animation-duration:4s] pointer-events-auto">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-[10px] text-primary">TOWER DELAY</span>
+<span class="material-symbols-outlined text-sm text-primary">broadcast_on_home</span>
+</div>
+<div class="font-data-mono text-xl text-on-surface">7.42ms</div>
+<div class="mt-2 h-1 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3 shadow-[0_0_8px_rgba(197,192,255,0.5)]"></div>
+</div>
+<div class="mt-2 text-[9px] font-label-caps text-on-surface-variant flex justify-between">
+<span>SIG STR: 94%</span>
+<span>ANGLE: 12.4°</span>
+</div>
+</div>
+<!-- Card: Fiber Ring -->
+<div class="absolute bottom-[15%] left-[40%] glass-panel p-4 w-48 rounded-lg animate-bounce [animation-duration:5.5s] pointer-events-auto">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-[10px] text-secondary">FIBER RING</span>
+<span class="material-symbols-outlined text-sm text-secondary">hub</span>
+</div>
+<div class="font-data-mono text-xl text-on-surface">0.67c <span class="text-xs text-on-surface-variant">L-SPD</span></div>
+<div class="mt-2 text-[9px] font-label-caps text-on-surface-variant flex flex-col gap-1">
+<div class="flex justify-between"><span>REFRACTION</span> <span>1.44 N</span></div>
+<div class="flex justify-between"><span>ATTENUATION</span> <span>0.18 dB/km</span></div>
+</div>
+</div>
+<!-- Card: Space Void -->
+<div class="absolute top-[20%] right-[10%] glass-panel p-4 w-52 rounded-lg animate-bounce [animation-duration:3.2s] pointer-events-auto">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-[10px] text-tertiary">VACUUM TRANSMISSION</span>
+<span class="material-symbols-outlined text-sm text-tertiary">vibration</span>
+</div>
+<div class="font-data-mono text-xl text-on-surface">0.00042 <span class="text-xs text-on-surface-variant">AU</span></div>
+<div class="mt-2 border-t border-white/5 pt-2 flex flex-col gap-1">
+<div class="flex justify-between text-[9px] font-label-caps text-on-surface-variant">
+<span>REFR. DELAY</span>
+<span class="text-tertiary">0.0000ms</span>
+</div>
+<div class="flex justify-between text-[9px] font-label-caps text-on-surface-variant">
+<span>DISTORTION</span>
+<span class="text-tertiary">0.001λ</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Progress Timeline Bar (Bottom-aligned floating) -->
+<div class="absolute bottom-32 left-1/2 -translate-x-1/2 w-full max-w-5xl px-8 z-20">
+<div class="relative h-12 flex items-center">
+<!-- Trace Line -->
+<div class="absolute inset-0 top-1/2 h-px bg-white/20 -translate-y-1/2"></div>
+<div class="absolute left-0 top-1/2 h-px bg-primary w-2/3 -translate-y-1/2 shadow-[0_0_10px_rgba(197,192,255,0.8)]"></div>
+<!-- Timeline Nodes -->
+<div class="relative w-full flex justify-between">
+<!-- Node 1 -->
+<div class="flex flex-col items-center group cursor-pointer">
+<div class="w-3 h-3 rounded-full bg-primary border border-white group-hover:scale-150 transition-transform shadow-[0_0_8px_rgba(197,192,255,1)]"></div>
+<span class="mt-3 font-label-caps text-[9px] text-primary">ASCII</span>
+</div>
+<!-- Node 2 -->
+<div class="flex flex-col items-center group cursor-pointer">
+<div class="w-3 h-3 rounded-full bg-primary border border-white group-hover:scale-150 transition-transform"></div>
+<span class="mt-3 font-label-caps text-[9px] text-primary">CODEX</span>
+</div>
+<!-- Node 3 -->
+<div class="flex flex-col items-center group cursor-pointer">
+<div class="w-3 h-3 rounded-full bg-primary border border-white group-hover:scale-150 transition-transform"></div>
+<span class="mt-3 font-label-caps text-[9px] text-primary">BINARY</span>
+</div>
+<!-- Node 4 -->
+<div class="flex flex-col items-center group cursor-pointer">
+<div class="w-3 h-3 rounded-full bg-primary border border-white group-hover:scale-150 transition-transform"></div>
+<span class="mt-3 font-label-caps text-[9px] text-primary">UPLINK</span>
+</div>
+<!-- Node 5 (Active) -->
+<div class="flex flex-col items-center group cursor-pointer">
+<div class="relative">
+<div class="w-5 h-5 rounded-full bg-primary animate-ping opacity-20 absolute -inset-0"></div>
+<div class="w-5 h-5 rounded-full bg-primary border-2 border-white flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[12px] text-on-primary font-bold">bolt</span>
+</div>
+</div>
+<span class="mt-3 font-label-caps text-[9px] text-on-surface font-bold">LASER</span>
+</div>
+<!-- Node 6 -->
+<div class="flex flex-col items-center group cursor-pointer opacity-40">
+<div class="w-3 h-3 rounded-full bg-white/20 border border-white group-hover:scale-150 transition-transform"></div>
+<span class="mt-3 font-label-caps text-[9px] text-on-surface-variant">FIBER</span>
+</div>
+<!-- Node 7 -->
+<div class="flex flex-col items-center group cursor-pointer opacity-40">
+<div class="w-3 h-3 rounded-full bg-white/20 border border-white group-hover:scale-150 transition-transform"></div>
+<span class="mt-3 font-label-caps text-[9px] text-on-surface-variant">DEST</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Playback Control Bar -->
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-4xl glass-panel h-16 rounded-full flex items-center px-8 justify-between z-30 shadow-2xl">
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">replay</span>
+</button>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">skip_previous</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center glow-hover transition-all">
+<span class="material-symbols-outlined">pause</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">skip_next</span>
+</button>
+</div>
+</div>
+<div class="flex-1 max-w-md px-10 flex items-center gap-4">
+<span class="font-label-caps text-[10px] text-on-surface-variant shrink-0">SPEED: 1.0X</span>
+<input class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary" max="2" min="0" step="0.1" type="range" value="1"/>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-[9px] text-on-surface-variant">TIMECODE</span>
+<span class="font-data-mono text-sm text-on-surface">00:04:22:15</span>
+</div>
+<button class="w-8 h-8 rounded border border-white/10 flex items-center justify-center hover:bg-white/5">
+<span class="material-symbols-outlined text-sm">fullscreen</span>
+</button>
+</div>
+</div>
+<!-- Floating Data Particles (Decorative) -->
+<div class="absolute inset-0 pointer-events-none scanline-effect opacity-30"></div>
+</main>
+<script>
+        // Micro-interactions for the latency ticker
+        const ticker = document.getElementById('latency-ticker');
+        let latency = 342;
+        
+        setInterval(() => {
+            const fluctuation = (Math.random() - 0.5) * 5;
+            latency = Math.max(0, latency + fluctuation);
+            const formatted = latency.toFixed(3).padStart(7, '0');
+            ticker.textContent = `00:00.${formatted}ms`;
+        }, 150);
+
+        // Simulated packet movement logic
+        // In a real app, this would update CSS variables for the packet icon
+        console.log('Interplanetary Packet Lifecycle tracing active...');
+    </script>
+</body></html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Relic Ring Protocol | Network Control</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;family=Space+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom Scrollbar for Glassmorphic Industrial Style */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
+        ::-webkit-scrollbar-thumb { 
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(197, 192, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(197, 192, 255, 0.4); }
+
+        .glass-panel {
+            backdrop-filter: blur(40px);
+            background: rgba(15, 19, 33, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .micro-glow-primary:hover {
+            box-shadow: 0 0 20px 0 rgba(197, 192, 255, 0.2);
+        }
+
+        .micro-glow-danger:hover {
+            box-shadow: 0 0 20px 0 rgba(240, 68, 56, 0.2);
+        }
+
+        @keyframes laser-pulse {
+            0% { stroke-dashoffset: 100; opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 0.4; }
+        }
+
+        .laser-line {
+            stroke-dasharray: 10;
+            animation: laser-pulse 3s linear infinite;
+        }
+
+        .scanning-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(197, 192, 255, 0.2), transparent);
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        .noise-overlay {
+            background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "on-background": "#dfe1f6",
+                "danger-red": "#F04438",
+                "primary": "#c5c0ff",
+                "on-error-container": "#ffdad6",
+                "on-secondary-fixed-variant": "#004c69",
+                "outline-variant": "#474555",
+                "on-secondary-fixed": "#001e2c",
+                "warning-gold": "#FFB020",
+                "surface-variant": "#303444",
+                "surface-dim": "#0f1321",
+                "primary-container": "#6d5ef9",
+                "tertiary-fixed": "#ffdcc6",
+                "on-tertiary-fixed-variant": "#713700",
+                "secondary-container": "#00a6e0",
+                "on-primary-fixed": "#140067",
+                "on-primary": "#2500a1",
+                "inverse-primary": "#5543e0",
+                "surface-tint": "#c5c0ff",
+                "surface-container-low": "#171b2a",
+                "surface": "#0f1321",
+                "surface-card": "#0B1020",
+                "on-surface": "#dfe1f6",
+                "surface-container-lowest": "#0a0d1c",
+                "on-secondary-container": "#00374d",
+                "on-tertiary-container": "#fffeff",
+                "on-error": "#690005",
+                "surface-container-highest": "#303444",
+                "tertiary": "#ffb785",
+                "on-primary-fixed-variant": "#3c21c8",
+                "outline": "#928ea1",
+                "on-primary-container": "#ffffff",
+                "on-surface-variant": "#c8c4d8",
+                "primary-fixed-dim": "#c5c0ff",
+                "error": "#ffb4ab",
+                "border-white": "rgba(255, 255, 255, 0.1)",
+                "surface-bright": "#353849",
+                "surface-container-high": "#262939",
+                "error-container": "#93000a",
+                "tertiary-container": "#b85d00",
+                "on-secondary": "#00354a",
+                "surface-container": "#1b1f2e",
+                "on-tertiary-fixed": "#301400",
+                "secondary-fixed-dim": "#7bd0ff",
+                "inverse-on-surface": "#2c303f",
+                "primary-fixed": "#e4dfff",
+                "inverse-surface": "#dfe1f6",
+                "secondary": "#7bd0ff",
+                "on-tertiary": "#502500",
+                "secondary-fixed": "#c4e7ff",
+                "success-green": "#00D084",
+                "tertiary-fixed-dim": "#ffb785",
+                "background": "#0f1321"
+              },
+              "fontFamily": {
+                "label-caps": ["JetBrains Mono"],
+                "body-sm": ["Inter"],
+                "body-md": ["Inter"],
+                "display-lg": ["Space Grotesk"],
+                "headline-sm": ["Space Grotesk"],
+                "data-mono": ["JetBrains Mono"],
+                "headline-lg": ["Space Grotesk"]
+              },
+              "fontSize": {
+                "label-caps": ["11px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                "data-mono": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden h-screen">
+<!-- Global Background Shader -->
+
+<!-- Side Navigation Shell -->
+<nav class="fixed left-0 top-0 h-full z-50 flex flex-col h-screen w-64 border-r border-border-white bg-surface/40 backdrop-blur-xl shadow-[0_0_20px_0_rgba(197,192,255,0.05)]">
+<div class="p-6 flex flex-col gap-1">
+<h1 class="font-headline-sm text-headline-sm tracking-tighter text-primary">RELIC RING</h1>
+<span class="font-label-caps text-label-caps opacity-60">Interplanetary v2.4</span>
+</div>
+<div class="mt-4 flex flex-col">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Universe Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">simulation</span>
+<span class="font-label-caps text-label-caps">Packet Simulator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">route</span>
+<span class="font-label-caps text-label-caps">Packet Journey</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps">Latency Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">translate</span>
+<span class="font-label-caps text-label-caps">Codex Translator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary border-r-2 border-primary transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-label-caps text-label-caps">Network Control</span>
+</a>
+</div>
+<div class="mt-auto p-6 border-t border-white/10 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border border-primary/30 bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<div>
+<div class="font-label-caps text-[10px] text-primary">COMMANDER</div>
+<div class="font-data-mono text-xs">C. SHEPHARD</div>
+</div>
+</div>
+</nav>
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 right-0 left-64 z-40 flex justify-between items-center px-8 h-16 w-full border-b border-border-white bg-surface/30 backdrop-blur-lg">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-success-green animate-pulse"></span>
+<span class="font-data-mono text-data-mono text-success-green">CORE SYSTEM NOMINAL</span>
+</div>
+<div class="h-4 w-[1px] bg-white/10"></div>
+<div class="flex items-center gap-4">
+<div class="font-label-caps text-[10px] opacity-40">ENCRYPTION</div>
+<div class="font-data-mono text-data-mono">QUANTUM-AES-512</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-all duration-200">notifications</span>
+<span class="absolute top-0 right-0 w-1.5 h-1.5 bg-danger-red rounded-full"></span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-all duration-200">terminal</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-all duration-200">account_tree</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 h-full flex overflow-hidden">
+<!-- Sector Health Map (Central Area) -->
+<section class="flex-1 relative p-8">
+<div class="h-full w-full glass-panel rounded-xl overflow-hidden relative border border-white/10">
+<!-- Scanning Effect Overlay -->
+<div class="scanning-line"></div>
+<div class="noise-overlay absolute inset-0"></div>
+<!-- Header Stats Overlay -->
+<div class="absolute top-6 left-6 flex gap-6 z-10">
+<div class="glass-panel p-4 rounded-lg flex flex-col">
+<span class="font-label-caps text-label-caps opacity-60 mb-1">NETWORK TOPOLOGY</span>
+<span class="font-headline-sm text-headline-sm text-primary">ORION SECTOR B-12</span>
+</div>
+<div class="glass-panel p-4 rounded-lg flex flex-col">
+<span class="font-label-caps text-label-caps opacity-60 mb-1">TOTAL NODES</span>
+<span class="font-data-mono text-2xl font-bold">42 <span class="text-xs text-success-green opacity-80">ACTIVE</span></span>
+</div>
+<div class="glass-panel p-4 rounded-lg flex flex-col">
+<span class="font-label-caps text-label-caps opacity-60 mb-1">AVG LATENCY</span>
+<span class="font-data-mono text-2xl font-bold">14.2ms</span>
+</div>
+</div>
+<!-- Network Graph Container (SVG Representation) -->
+<div class="h-full w-full flex items-center justify-center p-12">
+<svg class="w-full h-full" viewbox="0 0 1000 600">
+<!-- Defs for glows -->
+<defs>
+<filter id="glow">
+<fegaussianblur result="coloredBlur" stddeviation="2.5"></fegaussianblur>
+<femerge>
+<femergenode in="coloredBlur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+<!-- Links (Edges) -->
+<g class="edges">
+<!-- Healthy Links -->
+<path class="laser-line" d="M200,300 L400,150" filter="url(#glow)" stroke="#00D084" stroke-width="1"></path>
+<path class="laser-line" d="M200,300 L400,450" filter="url(#glow)" stroke="#00D084" stroke-width="1"></path>
+<path class="laser-line" d="M400,150 L600,150" filter="url(#glow)" stroke="#00D084" stroke-width="1"></path>
+<path class="laser-line" d="M400,450 L600,450" filter="url(#glow)" stroke="#00D084" stroke-width="1"></path>
+<!-- Jitter/Warning Links -->
+<path class="laser-line opacity-80" d="M600,150 L800,300" filter="url(#glow)" stroke="#FFB020" stroke-width="1.5"></path>
+<path class="laser-line opacity-80" d="M600,450 L800,300" filter="url(#glow)" stroke="#FFB020" stroke-width="1.5"></path>
+<!-- Broken Link -->
+<path class="opacity-40" d="M400,150 L400,450" stroke="#F04438" stroke-dasharray="4,4" stroke-width="0.5"></path>
+</g>
+<!-- Nodes (Planets) -->
+<g class="nodes">
+<!-- AEGIS -->
+<g class="node cursor-pointer group" transform="translate(200, 300)">
+<circle fill="rgba(197, 192, 255, 0.1)" r="30" stroke="#c5c0ff" stroke-width="1"></circle>
+<circle fill="#00D084" r="4" transform="translate(24, -24)"></circle>
+<text class="font-data-mono text-[10px] fill-on-surface" dy="50" text-anchor="middle">AEGIS PRIME</text>
+</g>
+<!-- BOREAS -->
+<g class="node cursor-pointer group" transform="translate(400, 150)">
+<circle fill="rgba(197, 192, 255, 0.1)" r="25" stroke="#c5c0ff" stroke-width="1"></circle>
+<circle fill="#00D084" r="4" transform="translate(20, -20)"></circle>
+<text class="font-data-mono text-[10px] fill-on-surface" dy="45" text-anchor="middle">BOREAS</text>
+</g>
+<!-- CAELUM -->
+<g class="node cursor-pointer group" transform="translate(400, 450)">
+<circle fill="rgba(197, 192, 255, 0.1)" r="28" stroke="#c5c0ff" stroke-width="1"></circle>
+<circle fill="#00D084" r="4" transform="translate(22, -22)"></circle>
+<text class="font-data-mono text-[10px] fill-on-surface" dy="48" text-anchor="middle">CAELUM HUB</text>
+</g>
+<!-- DRACO (Warning) -->
+<g class="node cursor-pointer group" transform="translate(600, 150)">
+<circle fill="rgba(255, 176, 32, 0.1)" r="22" stroke="#FFB020" stroke-width="1"></circle>
+<circle fill="#FFB020" r="4" transform="translate(18, -18)"></circle>
+<text class="font-data-mono text-[10px] fill-on-surface" dy="42" text-anchor="middle">DRACO OUTPOST</text>
+</g>
+<!-- ERIDANI (Warning) -->
+<g class="node cursor-pointer group" transform="translate(600, 450)">
+<circle fill="rgba(255, 176, 32, 0.1)" r="24" stroke="#FFB020" stroke-width="1"></circle>
+<circle fill="#FFB020" r="4" transform="translate(20, -20)"></circle>
+<text class="font-data-mono text-[10px] fill-on-surface" dy="44" text-anchor="middle">ERIDANI-9</text>
+</g>
+<!-- HELIOS (Disconnected) -->
+<g class="node cursor-pointer group" transform="translate(800, 300)">
+<circle fill="rgba(240, 68, 56, 0.05)" r="35" stroke="#F04438" stroke-dasharray="2,2" stroke-width="1"></circle>
+<circle fill="#F04438" r="4" transform="translate(28, -28)"></circle>
+<text class="font-data-mono text-[10px] fill-on-surface" dy="55" text-anchor="middle">HELIOS CORE</text>
+</g>
+</g>
+</svg>
+</div>
+<!-- Legend -->
+<div class="absolute bottom-6 left-6 glass-panel px-4 py-3 rounded-lg flex gap-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-success-green"></span>
+<span class="font-label-caps text-[9px] opacity-70">HEALTHY</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-warning-gold"></span>
+<span class="font-label-caps text-[9px] opacity-70">JITTER</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-danger-red"></span>
+<span class="font-label-caps text-[9px] opacity-70">OFFLINE</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Chaos Command Center (Right Sidebar) -->
+<aside class="w-[400px] h-full p-8 pl-0 flex flex-col gap-6">
+<!-- Failure Injection Panel -->
+<div class="glass-panel p-6 rounded-xl flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-sm text-lg text-primary">CHAOS ENGINE</h3>
+<span class="material-symbols-outlined text-danger-red animate-pulse">warning</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-center gap-2 p-4 rounded bg-surface/50 border border-white/10 hover:bg-danger-red/10 hover:border-danger-red/50 transition-all group micro-glow-danger">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">bolt</span>
+<span class="font-label-caps text-[10px]">SOLAR STORM</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded bg-surface/50 border border-white/10 hover:bg-danger-red/10 hover:border-danger-red/50 transition-all group micro-glow-danger">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">leak_remove</span>
+<span class="font-label-caps text-[10px]">FIBER CUT</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded bg-surface/50 border border-white/10 hover:bg-danger-red/10 hover:border-danger-red/50 transition-all group micro-glow-danger">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">power_off</span>
+<span class="font-label-caps text-[10px]">NODE FAILURE</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded bg-surface/50 border border-white/10 hover:bg-danger-red/10 hover:border-danger-red/50 transition-all group micro-glow-danger">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">cloud_off</span>
+<span class="font-label-caps text-[10px]">DISTORTION</span>
+</button>
+</div>
+<div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] opacity-50">AUTO-RECOVERY</span>
+<span class="font-data-mono text-success-green">ENGAGED</span>
+</div>
+<div class="w-12 h-6 bg-primary/20 rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 w-4 h-4 bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Node Status List -->
+<div class="glass-panel p-6 rounded-xl flex-1 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-sm text-lg text-primary">NODE REGISTRY</h3>
+<div class="text-[10px] font-data-mono opacity-50">FILTER: SECTOR B-12</div>
+</div>
+<div class="flex-1 overflow-y-auto pr-2 flex flex-col gap-3">
+<!-- Aegis -->
+<div class="flex items-center justify-between p-3 rounded bg-white/5 border border-white/5 hover:border-primary/30 transition-all">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-success-green shadow-[0_0_8px_rgba(0,208,132,0.6)]"></div>
+<span class="font-data-mono text-xs uppercase">Aegis Prime</span>
+</div>
+<span class="font-data-mono text-[10px] opacity-40">24ms / 98% LOAD</span>
+</div>
+<!-- Boreas -->
+<div class="flex items-center justify-between p-3 rounded bg-white/5 border border-white/5 hover:border-primary/30 transition-all">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-success-green shadow-[0_0_8px_rgba(0,208,132,0.6)]"></div>
+<span class="font-data-mono text-xs uppercase">Boreas</span>
+</div>
+<span class="font-data-mono text-[10px] opacity-40">12ms / 42% LOAD</span>
+</div>
+<!-- Draco -->
+<div class="flex items-center justify-between p-3 rounded bg-white/5 border border-white/5 hover:border-primary/30 transition-all border-warning-gold/30">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-warning-gold shadow-[0_0_8px_rgba(255,176,32,0.6)]"></div>
+<span class="font-data-mono text-xs uppercase text-warning-gold">Draco Outpost</span>
+</div>
+<span class="font-data-mono text-[10px] opacity-40">312ms / 89% LOAD</span>
+</div>
+<!-- Helios -->
+<div class="flex items-center justify-between p-3 rounded bg-danger-red/5 border border-danger-red/20 group hover:bg-danger-red/10 transition-all">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-danger-red animate-pulse"></div>
+<span class="font-data-mono text-xs uppercase text-danger-red">Helios Core</span>
+</div>
+<button class="bg-danger-red/20 text-danger-red font-label-caps text-[9px] px-2 py-1 rounded hover:bg-danger-red hover:text-white transition-colors">FORCE REBOOT</button>
+</div>
+<!-- More placeholders for density -->
+<div class="flex items-center justify-between p-3 rounded bg-white/5 border border-white/5 opacity-60">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-success-green"></div>
+<span class="font-data-mono text-xs uppercase">Caelum Hub</span>
+</div>
+<span class="font-data-mono text-[10px]">15ms / 12%</span>
+</div>
+</div>
+</div>
+<!-- Terminal Log -->
+<div class="glass-panel h-48 rounded-xl bg-black/40 border border-white/10 overflow-hidden flex flex-col">
+<div class="bg-white/5 px-4 py-2 border-b border-white/5 flex items-center justify-between">
+<span class="font-label-caps text-[10px] opacity-60 tracking-widest">SYSTEM EVENT LOG</span>
+<div class="flex gap-1">
+<div class="w-2 h-2 rounded-full bg-white/20"></div>
+<div class="w-2 h-2 rounded-full bg-white/20"></div>
+</div>
+</div>
+<div class="flex-1 p-4 font-data-mono text-[11px] leading-relaxed overflow-y-auto space-y-1 text-on-surface-variant">
+<div class="flex gap-3">
+<span class="opacity-30">[14:22:01]</span>
+<span class="text-danger-red">CRITICAL: HELIOS CORE OFFLINE</span>
+</div>
+<div class="flex gap-3">
+<span class="opacity-30">[14:22:02]</span>
+<span class="text-primary">INFO: DETECTING REROUTE PATHS...</span>
+</div>
+<div class="flex gap-3">
+<span class="opacity-30">[14:22:04]</span>
+<span class="text-success-green">SUCCESS: PACKETS REROUTED VIA CAELUM HUB</span>
+</div>
+<div class="flex gap-3">
+<span class="opacity-30">[14:22:15]</span>
+<span class="text-warning-gold">WARN: DRACO OUTPOST LATENCY SPIKE (312MS)</span>
+</div>
+<div class="flex gap-3">
+<span class="opacity-30">[14:23:42]</span>
+<span class="animate-pulse">_ EXECUTION BUFFER CLEAR...</span>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- Contextual FAB - Suppression Logic: Not rendered on Control/Settings screen -->
+<script>
+        // Micro-interactions and simulation logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const chaosButtons = document.querySelectorAll('button.micro-glow-danger');
+            const terminal = document.querySelector('.overflow-y-auto.space-y-1');
+
+            chaosButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const type = btn.querySelector('span:last-child').textContent;
+                    addLogEntry(`INITIATING ${type}...`, 'text-danger-red');
+                    
+                    // Simple visual shake for impact
+                    document.querySelector('section').classList.add('animate-bounce');
+                    setTimeout(() => {
+                        document.querySelector('section').classList.remove('animate-bounce');
+                        addLogEntry(`SYSTEM RESPONSE: MITIGATION ACTIVE`, 'text-primary');
+                    }, 500);
+                });
+            });
+
+            function addLogEntry(text, colorClass) {
+                const now = new Date();
+                const time = now.toTimeString().split(' ')[0];
+                const entry = document.createElement('div');
+                entry.className = 'flex gap-3';
+                entry.innerHTML = `<span class="opacity-30">[${time}]</span> <span class="${colorClass}">${text}</span>`;
+                terminal.appendChild(entry);
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+
+            // Random Status Pulse Simulation
+            setInterval(() => {
+                const nodes = document.querySelectorAll('.node circle[r="4"]');
+                const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
+                randomNode.setAttribute('opacity', '0.2');
+                setTimeout(() => randomNode.setAttribute('opacity', '1'), 150);
+            }, 2000);
+        });
+    </script>
+</body></html>

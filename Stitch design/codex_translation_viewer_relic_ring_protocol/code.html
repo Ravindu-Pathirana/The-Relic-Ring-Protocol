@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Relic Ring Protocol - Codex Translation Viewer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;family=JetBrains+Mono:wght@400;700&amp;family=Inter:wght@300..600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanline-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(197, 192, 255, 0.05), transparent);
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+        }
+        .glass-card {
+            background: rgba(15, 19, 33, 0.4);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .micro-glow:hover {
+            box-shadow: 0 0 20px 0 rgba(197, 192, 255, 0.2);
+        }
+        .data-stream::-webkit-scrollbar {
+            width: 4px;
+        }
+        .data-stream::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+        .data-stream::-webkit-scrollbar-thumb:hover {
+            background: rgba(197, 192, 255, 0.5);
+        }
+        .typing-effect {
+            overflow: hidden;
+            border-right: 2px solid #c5c0ff;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #c5c0ff; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#00a6e0",
+                      "on-background": "#dfe1f6",
+                      "on-tertiary": "#502500",
+                      "surface-container-low": "#171b2a",
+                      "on-tertiary-fixed-variant": "#713700",
+                      "on-primary-fixed": "#140067",
+                      "on-surface-variant": "#c8c4d8",
+                      "outline": "#928ea1",
+                      "secondary-fixed": "#c4e7ff",
+                      "on-primary-fixed-variant": "#3c21c8",
+                      "on-secondary-fixed-variant": "#004c69",
+                      "on-tertiary-container": "#fffeff",
+                      "danger-red": "#F04438",
+                      "on-tertiary-fixed": "#301400",
+                      "on-error": "#690005",
+                      "inverse-primary": "#5543e0",
+                      "primary-fixed-dim": "#c5c0ff",
+                      "on-surface": "#dfe1f6",
+                      "tertiary": "#ffb785",
+                      "inverse-surface": "#dfe1f6",
+                      "tertiary-fixed-dim": "#ffb785",
+                      "outline-variant": "#474555",
+                      "error": "#ffb4ab",
+                      "on-secondary-container": "#00374d",
+                      "surface-container": "#1b1f2e",
+                      "surface-card": "#0B1020",
+                      "inverse-on-surface": "#2c303f",
+                      "success-green": "#00D084",
+                      "primary-fixed": "#e4dfff",
+                      "on-primary": "#2500a1",
+                      "error-container": "#93000a",
+                      "on-secondary-fixed": "#001e2c",
+                      "surface-dim": "#0f1321",
+                      "secondary": "#7bd0ff",
+                      "on-primary-container": "#ffffff",
+                      "on-secondary": "#00354a",
+                      "surface-bright": "#353849",
+                      "surface-variant": "#303444",
+                      "surface-tint": "#c5c0ff",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-high": "#262939",
+                      "background": "#0f1321",
+                      "primary": "#c5c0ff",
+                      "warning-gold": "#FFB020",
+                      "surface-container-highest": "#303444",
+                      "secondary-fixed-dim": "#7bd0ff",
+                      "tertiary-container": "#b85d00",
+                      "surface-container-lowest": "#0a0d1c",
+                      "tertiary-fixed": "#ffdcc6",
+                      "primary-container": "#6d5ef9",
+                      "surface": "#0f1321",
+                      "border-white": "rgba(255, 255, 255, 0.1)"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "widget-padding": "24px",
+                      "compact-padding": "12px",
+                      "gutter": "16px",
+                      "grid-margin": "32px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Space Grotesk"],
+                      "headline-sm": ["Space Grotesk"],
+                      "display-lg": ["Space Grotesk"],
+                      "label-caps": ["JetBrains Mono"],
+                      "body-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "data-mono": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-caps": ["11px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "data-mono": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-hidden selection:bg-primary/30 selection:text-primary">
+<!-- Starfield/Background -->
+<div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+
+<div class="scanline-overlay"></div>
+</div>
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full z-50 flex flex-col bg-surface/40 backdrop-blur-xl h-screen w-64 border-r border-border-white shadow-[0_0_20px_0_rgba(197,192,255,0.05)]">
+<div class="p-6">
+<h1 class="font-headline-sm text-headline-sm tracking-tighter text-primary">RELIC RING</h1>
+<p class="font-label-caps text-[9px] text-on-surface-variant/60 tracking-widest mt-1">INTERPLANETARY V2.4</p>
+</div>
+<nav class="flex-1 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Universe Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">simulation</span>
+<span class="font-label-caps text-label-caps">Packet Simulator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">route</span>
+<span class="font-label-caps text-label-caps">Packet Journey</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps">Latency Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary border-r-2 border-primary" href="#">
+<span class="material-symbols-outlined">translate</span>
+<span class="font-label-caps text-label-caps">Codex Translator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-md" href="#">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-label-caps text-label-caps">Network Control</span>
+</a>
+</nav>
+<div class="p-6 border-t border-white/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-primary">security</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface">COMMANDER_01</span>
+<span class="font-data-mono text-[9px] text-success-green">LINK: SECURE</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 left-64 h-16 z-40 flex justify-between items-center px-grid-margin bg-surface/30 backdrop-blur-lg border-b border-white/10">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-background border-none focus:ring-1 focus:ring-primary/50 text-data-mono font-data-mono text-xs pl-10 pr-4 py-1.5 w-64 rounded-lg placeholder:text-on-surface-variant/40" placeholder="QUERY PROTOCOL..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-all duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all duration-200">
+<span class="material-symbols-outlined">terminal</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all duration-200">
+<span class="material-symbols-outlined">account_tree</span>
+</button>
+</div>
+<div class="h-6 w-px bg-white/10 mx-2"></div>
+<div class="flex items-center gap-3">
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant">RELIC_ID: <span class="text-primary">RR-9942</span></span>
+<img class="w-8 h-8 rounded border border-primary/30 object-cover" data-alt="A futuristic portrait of a high-ranking space commander with glowing cybernetic elements on their face and uniform, lit by soft blue and purple holographic displays, in a highly detailed science fiction setting with a dark obsidian and glass aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxw4MmPxOJmbV2mDxMk8yyw9Vebx9EsAr6pAYqSKQWAbfALxrIAxne1AjE4CYMacoA3vjb2qJK7lPiIrD_KulliTRShD2ni68uJqi2rBHufomxasENYU4YnXCGj97bKk1MYUM13-P76kiHe0xmmL4cCXejTn1DdW3E4abMdPNO38gnF-s_CrA2mv-uwNa06b9QrFfJuiqO-PILUPCgUnWnHojPCUlRg-CwIivwVI0-y41cxBA_QlVogn11gdaOO15Ymo0Jz0TCT5Ma"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pl-64 pt-16 h-screen overflow-y-auto">
+<div class="p-grid-margin max-w-[1400px] mx-auto space-y-gutter">
+<!-- Current Hop Timeline -->
+<section class="glass-card p-4 rounded-xl">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">timeline</span>
+                        TRANSLATION HOP TIMELINE
+                    </h3>
+<span class="font-data-mono text-[10px] text-on-surface-variant uppercase">Status: Routing Packets via Aegis-9</span>
+</div>
+<div class="flex items-center gap-4 px-2">
+<div class="flex-1 relative flex items-center justify-between">
+<!-- Connecting Line -->
+<div class="absolute h-px bg-white/10 top-1/2 left-4 right-4 -z-10"></div>
+<div class="absolute h-[2px] bg-primary top-1/2 left-4 w-1/4 -z-10 shadow-[0_0_10px_rgba(197,192,255,0.5)]"></div>
+<!-- Timeline Nodes -->
+<button class="flex flex-col items-center gap-2 group">
+<div class="w-8 h-8 rounded-full bg-primary border-4 border-surface shadow-[0_0_15px_rgba(197,192,255,0.4)] flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-on-primary">source</span>
+</div>
+<span class="font-label-caps text-[10px] text-primary">EARTH_SRC</span>
+</button>
+<button class="flex flex-col items-center gap-2 group">
+<div class="w-8 h-8 rounded-full bg-primary border-4 border-surface shadow-[0_0_15px_rgba(197,192,255,0.4)] flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-on-primary">security</span>
+</div>
+<span class="font-label-caps text-[10px] text-primary">AEGIS (BASE 8)</span>
+</button>
+<button class="flex flex-col items-center gap-2 group opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+<div class="w-8 h-8 rounded-full bg-surface-variant border-4 border-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-on-surface-variant">cloud_queue</span>
+</div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">CAELUM (BASE 5)</span>
+</button>
+<button class="flex flex-col items-center gap-2 group opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+<div class="w-8 h-8 rounded-full bg-surface-variant border-4 border-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-on-surface-variant">settings_input_antenna</span>
+</div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">RELIC_CORE</span>
+</button>
+<button class="flex flex-col items-center gap-2 group opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+<div class="w-8 h-8 rounded-full bg-surface-variant border-4 border-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-on-surface-variant">flag</span>
+</div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">FINAL_DEST</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Three Panel Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-stretch min-h-[600px]">
+<!-- Panel 1: Original Message -->
+<div class="lg:col-span-3 glass-card rounded-xl flex flex-col p-widget-padding relative overflow-hidden micro-glow transition-all">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+<div class="flex items-center justify-between mb-6">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant">ORIGINAL_MSG_IN</h4>
+<span class="material-symbols-outlined text-sm text-primary/60">code</span>
+</div>
+<div class="flex-1 space-y-6">
+<div class="space-y-2">
+<p class="font-label-caps text-[10px] text-on-surface-variant/60 uppercase tracking-widest">Plaintext</p>
+<div class="bg-background/80 p-4 rounded border border-white/5 font-display-lg text-display-lg text-primary text-center py-8">
+                                Hello
+                            </div>
+</div>
+<div class="space-y-4 font-data-mono text-data-mono text-sm">
+<div class="flex justify-between border-b border-white/5 pb-2">
+<span class="text-on-surface-variant">ASCII</span>
+<span class="text-secondary">72 101 108 108 111</span>
+</div>
+<div class="flex justify-between border-b border-white/5 pb-2">
+<span class="text-on-surface-variant">HEX</span>
+<span class="text-tertiary">48 65 6c 6c 6f</span>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-on-surface-variant">BYTES</span>
+<div class="bg-black/40 p-3 rounded text-[11px] leading-relaxed break-all text-on-surface/80">
+                                    01001000 01100101 01101100 01101100 01101111
+                                </div>
+</div>
+</div>
+</div>
+<div class="mt-6 p-3 bg-primary/5 border border-primary/20 rounded">
+<p class="font-data-mono text-[10px] text-primary/70 italic">System: Message integrity verified. Ready for Aegis protocol mapping.</p>
+</div>
+</div>
+<!-- Panel 2: Planetary Codex Conversion -->
+<div class="lg:col-span-6 glass-card rounded-xl flex flex-col p-widget-padding relative micro-glow transition-all">
+<div class="flex items-center justify-between mb-8">
+<div class="flex flex-col">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant">PLANETARY_CODEX_LOGIC</h4>
+<span class="font-data-mono text-xs text-primary">Current: Earth Dec (Base 10) → Aegis (Base 8)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="px-2 py-1 bg-success-green/10 border border-success-green/30 rounded text-[10px] font-data-mono text-success-green animate-pulse">ACTIVE_TRANSLATION</div>
+</div>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center gap-12 relative">
+<!-- Step 1 -->
+<div class="flex items-center gap-8 w-full max-w-md bg-white/5 p-6 rounded-lg border border-white/10 relative">
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 rounded bg-background border border-primary/40 flex items-center justify-center font-display-lg text-primary">72</div>
+<span class="font-label-caps text-[9px] mt-2 text-on-surface-variant">DECIMAL</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full h-px bg-gradient-to-r from-primary to-transparent relative">
+<span class="material-symbols-outlined absolute -right-2 -top-[11px] text-lg text-primary">chevron_right</span>
+</div>
+<span class="font-data-mono text-[10px] text-on-surface-variant">x = floor(72/8) | rem(72/8)</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 rounded bg-primary/20 border border-primary flex items-center justify-center font-display-lg text-primary shadow-[0_0_15px_rgba(197,192,255,0.2)]">110</div>
+<span class="font-label-caps text-[9px] mt-2 text-primary">OCTAL (B8)</span>
+</div>
+</div>
+<!-- Central Graphic Visualization -->
+<div class="relative w-48 h-48 flex items-center justify-center">
+<img class="absolute inset-0 w-full h-full opacity-60 animate-[spin_30s_linear_infinite]" data-alt="A stylized glowing circular diagram representing a futuristic base conversion codex, with neon blue dashed lines spinning in orbit and complex mathematical notations radiating from the center, following the design system's dark glassmorphic industrial theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXN4REfPApcSIHFvpgG0bjR486nZoqYSVgc9k3XKboX_J9AkZf2aoJXP3pOscbBzMV6zpCi0a6YVb0D9RajfKcL50Rua6Pg_sRKUx337a25lxaH9vkZItkYxZ8KNrpFa5af0_EOOARTnYeiMb39fH6EoEfFciboy9zyi7FQU_ns3DyXIbjgOiZCSjaekblaQkqE66S-213CGiFx1EhjpaGN1OPng7_VmYdmxtODmZdG-23ctavAGIFCNkny4a3yrxsaDDk0ufgJWne"/>
+<div class="z-10 font-data-mono text-headline-sm text-primary tracking-widest bg-background/60 backdrop-blur-md px-4 py-2 border border-primary/20 rounded">
+                                MODE: B8
+                            </div>
+</div>
+<!-- Step 2 table logic -->
+<div class="w-full font-data-mono text-[12px]">
+<div class="grid grid-cols-5 gap-4 border-b border-white/10 pb-2 text-on-surface-variant/60 font-label-caps">
+<span>CHAR</span>
+<span>DEC</span>
+<span>LOGIC</span>
+<span>REM</span>
+<span class="text-right">B8_RESULT</span>
+</div>
+<div class="space-y-3 py-4">
+<div class="grid grid-cols-5 gap-4 text-on-surface border-b border-white/5 pb-2 hover:bg-white/5 transition-colors p-1">
+<span class="text-primary font-bold">H</span>
+<span>72</span>
+<span class="text-on-surface-variant">72 ÷ 8 = 9</span>
+<span class="text-secondary">0</span>
+<span class="text-right text-primary">110</span>
+</div>
+<div class="grid grid-cols-5 gap-4 text-on-surface border-b border-white/5 pb-2 hover:bg-white/5 transition-colors p-1">
+<span class="text-primary font-bold">e</span>
+<span>101</span>
+<span class="text-on-surface-variant">101 ÷ 8 = 12</span>
+<span class="text-secondary">5</span>
+<span class="text-right text-primary">145</span>
+</div>
+<div class="grid grid-cols-5 gap-4 text-on-surface border-b border-white/5 pb-2 hover:bg-white/5 transition-colors p-1">
+<span class="text-primary font-bold">l</span>
+<span>108</span>
+<span class="text-on-surface-variant">108 ÷ 8 = 13</span>
+<span class="text-secondary">4</span>
+<span class="text-right text-primary">154</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Panel 3: Binary Stream / Packet Frame -->
+<div class="lg:col-span-3 glass-card rounded-xl flex flex-col p-widget-padding relative micro-glow overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 pointer-events-none">
+<div class="absolute top-[-20px] right-[-20px] w-10 h-10 bg-primary/20 blur-xl"></div>
+</div>
+<div class="flex items-center justify-between mb-6">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant">NETWORK_STREAM_OUT</h4>
+<span class="material-symbols-outlined text-sm text-secondary">rss_feed</span>
+</div>
+<div class="flex-1 flex flex-col gap-6 overflow-hidden">
+<div class="space-y-2">
+<p class="font-label-caps text-[10px] text-on-surface-variant/60 uppercase tracking-widest">Protocol Frame</p>
+<div class="bg-surface-container-lowest p-3 rounded font-data-mono text-[10px] text-on-surface-variant border border-white/5 space-y-1">
+<div class="flex justify-between border-b border-white/5 pb-1">
+<span class="text-secondary">HEADER:</span>
+<span class="text-on-surface">RR_V2.4_SEC</span>
+</div>
+<div class="flex justify-between border-b border-white/5 pb-1">
+<span class="text-secondary">SRC:</span>
+<span class="text-on-surface">0x7F000001</span>
+</div>
+<div class="flex justify-between border-b border-white/5 pb-1">
+<span class="text-secondary">DST:</span>
+<span class="text-on-surface">0xAE91924B</span>
+</div>
+<div class="flex justify-between">
+<span class="text-secondary">FLAGS:</span>
+<span class="text-on-surface">00000001</span>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-2 flex flex-col overflow-hidden">
+<p class="font-label-caps text-[10px] text-on-surface-variant/60 uppercase tracking-widest">Binary Live Stream</p>
+<div class="flex-1 bg-black/60 p-4 rounded-lg font-data-mono text-[11px] text-success-green/80 overflow-y-auto data-stream leading-loose">
+<span class="typing-effect block text-primary mb-2">// INIT_TRANSMISSION</span>
+<span class="block">11010110 01101011 00101101</span>
+<span class="block">11100101 01011010 11011110</span>
+<span class="block text-on-surface-variant/40">10101011 00011111 01010101</span>
+<span class="block">00010101 11110010 10101011</span>
+<span class="block text-primary">FRAME_MARKER_09:</span>
+<span class="block">10101010 11110000 11001100</span>
+<span class="block">01010101 00110011 11111111</span>
+<span class="block text-warning-gold">BIT_ERR_CHK: VALID</span>
+<span class="block">11001101 10101011 01010101</span>
+<span class="block">10101011 00110011 00000000</span>
+<span class="block">00011111 11000111 10101010</span>
+</div>
+</div>
+</div>
+<div class="mt-6 flex gap-2">
+<button class="flex-1 py-2 bg-primary text-on-primary font-label-caps text-[10px] rounded hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[14px]">send</span>
+                            BROADCAST_PACKET
+                        </button>
+<button class="w-10 h-10 border border-white/10 rounded flex items-center justify-center hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">refresh</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Stats -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter mt-8">
+<div class="glass-card p-4 rounded-lg border-l-4 border-l-primary flex flex-col gap-1">
+<span class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-widest">TRANSLATION_COMPUTE</span>
+<span class="font-data-mono text-xl text-primary">0.00042ms</span>
+</div>
+<div class="glass-card p-4 rounded-lg border-l-4 border-l-secondary flex flex-col gap-1">
+<span class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-widest">ENTROPY_LOSS</span>
+<span class="font-data-mono text-xl text-secondary">0.00%</span>
+</div>
+<div class="glass-card p-4 rounded-lg border-l-4 border-l-tertiary flex flex-col gap-1">
+<span class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-widest">AEGIS_NODES_ACTIVE</span>
+<span class="font-data-mono text-xl text-tertiary">4,129</span>
+</div>
+<div class="glass-card p-4 rounded-lg border-l-4 border-l-success-green flex flex-col gap-1">
+<span class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-widest">PROTOCOL_SYMMETRY</span>
+<span class="font-data-mono text-xl text-success-green">NOMINAL</span>
+</div>
+</section>
+</div>
+</main>
+<script>
+        // Micro-interaction for the timeline nodes
+        document.querySelectorAll('.group').forEach(button => {
+            button.addEventListener('click', function() {
+                // Handle active state visuals
+                document.querySelectorAll('.group div').forEach(div => {
+                    div.classList.remove('bg-primary', 'shadow-[0_0_15px_rgba(197,192,255,0.4)]');
+                    div.classList.add('bg-surface-variant');
+                });
+                this.querySelector('div').classList.add('bg-primary', 'shadow-[0_0_15px_rgba(197,192,255,0.4)]');
+                this.querySelector('div').classList.remove('bg-surface-variant');
+            });
+        });
+
+        // Atmospheric mouse glow effect
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
+                    card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(197, 192, 255, 0.05) 0%, rgba(15, 19, 33, 0.4) 100%)`;
+                } else {
+                    card.style.background = `rgba(15, 19, 33, 0.4)`;
+                }
+            });
+        });
+    </script>
+</body></html>

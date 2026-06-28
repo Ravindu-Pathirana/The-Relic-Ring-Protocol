@@ -1,0 +1,14 @@
+{
+  "name": "relic-ring-shared",
+  "version": "1.0.0",
+  "description": "Shared types, constants, and protocol logic for the Relic Ring Protocol simulation",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

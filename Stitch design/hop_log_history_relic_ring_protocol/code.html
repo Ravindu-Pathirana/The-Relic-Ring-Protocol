@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Relic Ring | Hop Log &amp; History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @layer base {
+            body {
+                @apply bg-background text-on-background font-body-md antialiased overflow-hidden;
+            }
+        }
+        .glass-panel {
+            @apply bg-surface/40 backdrop-blur-xl border border-white/10;
+        }
+        .micro-glow-primary:hover {
+            box-shadow: 0 0 20px 0 rgba(197, 192, 255, 0.15);
+        }
+        .data-table-row:hover {
+            @apply bg-white/5;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(197, 192, 255, 0.4);
+        }
+        .glow-dot {
+            box-shadow: 0 0 8px currentColor;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-card": "#0B1020",
+                      "success-green": "#00D084",
+                      "secondary": "#7bd0ff",
+                      "on-secondary": "#00354a",
+                      "inverse-primary": "#5543e0",
+                      "primary-fixed-dim": "#c5c0ff",
+                      "on-background": "#dfe1f6",
+                      "on-secondary-container": "#00374d",
+                      "on-primary": "#2500a1",
+                      "inverse-on-surface": "#2c303f",
+                      "background": "#0f1321",
+                      "on-primary-fixed": "#140067",
+                      "tertiary-container": "#b85d00",
+                      "surface-dim": "#0f1321",
+                      "surface-container-low": "#171b2a",
+                      "secondary-fixed": "#c4e7ff",
+                      "on-tertiary": "#502500",
+                      "inverse-surface": "#dfe1f6",
+                      "surface-variant": "#303444",
+                      "on-error": "#690005",
+                      "surface-bright": "#353849",
+                      "border-white": "rgba(255, 255, 255, 0.1)",
+                      "secondary-container": "#00a6e0",
+                      "error-container": "#93000a",
+                      "surface-tint": "#c5c0ff",
+                      "surface-container-highest": "#303444",
+                      "outline": "#928ea1",
+                      "tertiary-fixed": "#ffdcc6",
+                      "on-secondary-fixed-variant": "#004c69",
+                      "surface-container-high": "#262939",
+                      "on-tertiary-container": "#fffeff",
+                      "primary-container": "#6d5ef9",
+                      "on-tertiary-fixed-variant": "#713700",
+                      "tertiary-fixed-dim": "#ffb785",
+                      "on-primary-container": "#ffffff",
+                      "on-secondary-fixed": "#001e2c",
+                      "danger-red": "#F04438",
+                      "on-surface-variant": "#c8c4d8",
+                      "outline-variant": "#474555",
+                      "on-primary-fixed-variant": "#3c21c8",
+                      "on-error-container": "#ffdad6",
+                      "surface": "#0f1321",
+                      "warning-gold": "#FFB020",
+                      "surface-container": "#1b1f2e",
+                      "on-surface": "#dfe1f6",
+                      "surface-container-lowest": "#0a0d1c",
+                      "error": "#ffb4ab",
+                      "primary": "#c5c0ff",
+                      "tertiary": "#ffb785",
+                      "secondary-fixed-dim": "#7bd0ff",
+                      "on-tertiary-fixed": "#301400",
+                      "primary-fixed": "#e4dfff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "compact-padding": "12px",
+                      "widget-padding": "24px",
+                      "gutter": "16px",
+                      "grid-margin": "32px"
+              },
+              "fontFamily": {
+                      "label-caps": ["JetBrains Mono"],
+                      "display-lg": ["Space Grotesk"],
+                      "headline-sm": ["Space Grotesk"],
+                      "data-mono": ["JetBrains Mono"],
+                      "headline-lg": ["Space Grotesk"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "label-caps": ["11px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                      "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "headline-sm": ["20px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                      "data-mono": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                      "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                      "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                      "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background overflow-hidden">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full z-50 flex flex-col w-64 glass-panel border-r border-border-white shadow-[0_0_20px_0_rgba(197,192,255,0.05)]">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-background text-lg" style="font-variation-settings: 'FILL' 1;">rebase_edit</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm tracking-tighter text-primary">RELIC RING</h1>
+<p class="text-[10px] font-label-caps text-on-surface-variant opacity-60">Interplanetary v2.4</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Universe Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">simulation</span>
+<span class="font-label-caps text-label-caps">Packet Simulator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary border-r-2 border-primary" href="#">
+<span class="material-symbols-outlined">route</span>
+<span class="font-label-caps text-label-caps">Packet Journey</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps">Latency Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">translate</span>
+<span class="font-label-caps text-label-caps">Codex Translator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-label-caps text-label-caps">Network Control</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/10">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-white/5">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="A professional close-up portrait of a futuristic space station commander with silver-streaked hair, wearing a sleek matte-black tactical uniform with bioluminescent blue identification tags. The character is illuminated by the soft blue glow of holographic screens in a high-tech control room setting, emphasizing a focused and authoritative presence in a dark, cyberpunk-inspired atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgpJuB8FpW-4iuxqneswQ3q2zMDMYDmrJGZ9_2G-tupFHQQUy3nm3scE4Tsodkd_8vWvOOsJmGye1gEcZZkTT1FIYsTUAFP11loXrWwk1b56YMGV2xIHK_SYFERplnviD6CKh44zjr1mwkDdpmmTZX9x_XWpkRiGzZD6nahaz1Yo3K23-1MBm_YI-RPpip_HFkxIvnfBHi2xOViih1xYUzQnMmFlDoJQ6t8dMTdndkspFwvQU6JNfR6Y33PVT6XpRWBk2J_T6JfPNF"/>
+</div>
+<div class="overflow-hidden">
+<p class="font-data-mono text-[12px] truncate text-on-surface">Cdr. K. Aris</p>
+<p class="font-label-caps text-[10px] text-success-green">MISSION_STABLE</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 left-64 h-16 z-40 flex justify-between items-center px-grid-margin glass-panel border-b border-white/10">
+<div class="flex items-center gap-6">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Hop Log &amp; History</h2>
+<div class="h-6 w-[1px] bg-white/10"></div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container-lowest border border-white/10 rounded-full pl-9 pr-4 py-1.5 text-data-mono text-sm focus:border-primary focus:ring-0 w-64 transition-all" placeholder="Search Trace ID..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">terminal</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">account_tree</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="fixed inset-0 left-64 top-16 bg-background p-6 flex flex-col gap-6 overflow-hidden">
+<!-- KPI Summary Bar -->
+<section class="grid grid-cols-4 gap-4 shrink-0">
+<div class="glass-panel p-4 rounded-xl flex items-center gap-4 group cursor-default">
+<div class="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">package_2</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-60">Total Packets Sent</p>
+<h3 class="font-data-mono text-xl text-primary font-bold">14,208,921</h3>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl flex items-center gap-4 group cursor-default">
+<div class="w-12 h-12 rounded-lg bg-secondary/10 border border-secondary/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-2xl">timer</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-60">Avg. Latency</p>
+<h3 class="font-data-mono text-xl text-secondary font-bold">142.4 ms</h3>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl flex items-center gap-4 group cursor-default">
+<div class="w-12 h-12 rounded-lg bg-success-green/10 border border-success-green/20 flex items-center justify-center text-success-green">
+<span class="material-symbols-outlined text-2xl">verified</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-60">Success Rate</p>
+<h3 class="font-data-mono text-xl text-success-green font-bold">99.98%</h3>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl flex items-center gap-4 group cursor-default">
+<div class="w-12 h-12 rounded-lg bg-tertiary/10 border border-tertiary/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-2xl">database</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-60">Total Data Volume</p>
+<h3 class="font-data-mono text-xl text-tertiary font-bold">4.2 PB</h3>
+</div>
+</div>
+</section>
+<!-- Main Workspace: Filtering, Table, and Details -->
+<div class="flex-1 flex gap-6 overflow-hidden">
+<!-- Filter Sidebar -->
+<aside class="w-64 glass-panel rounded-xl p-4 flex flex-col gap-6 shrink-0">
+<div>
+<h4 class="font-label-caps text-label-caps text-primary mb-4">LOG FILTERS</h4>
+<div class="space-y-4">
+<div>
+<label class="block font-label-caps text-[10px] text-on-surface-variant mb-1.5">PLANETARY NODE</label>
+<select class="w-full bg-surface-container-lowest border border-white/10 rounded p-2 text-xs font-data-mono text-on-surface focus:border-primary focus:ring-0">
+<option>All Nodes</option>
+<option>Earth-OS-1</option>
+<option>Mars-Prime</option>
+<option>Europa-Relay</option>
+<option>Saturn-Ring-01</option>
+</select>
+</div>
+<div>
+<label class="block font-label-caps text-[10px] text-on-surface-variant mb-1.5">TRANSMISSION STATUS</label>
+<div class="flex flex-col gap-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="rounded border-white/10 bg-surface-container text-primary focus:ring-0 w-4 h-4" type="checkbox"/>
+<span class="text-xs font-data-mono text-on-surface-variant group-hover:text-on-surface">SUCCESS</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="rounded border-white/10 bg-surface-container text-primary focus:ring-0 w-4 h-4" type="checkbox"/>
+<span class="text-xs font-data-mono text-on-surface-variant group-hover:text-on-surface">FAILURE</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="rounded border-white/10 bg-surface-container text-primary focus:ring-0 w-4 h-4" type="checkbox"/>
+<span class="text-xs font-data-mono text-on-surface-variant group-hover:text-on-surface">REROUTED</span>
+</label>
+</div>
+</div>
+<div>
+<label class="block font-label-caps text-[10px] text-on-surface-variant mb-1.5">DATE RANGE (UTC)</label>
+<div class="grid grid-cols-1 gap-2">
+<input class="bg-surface-container-lowest border border-white/10 rounded p-2 text-xs font-data-mono text-on-surface" type="date"/>
+<input class="bg-surface-container-lowest border border-white/10 rounded p-2 text-xs font-data-mono text-on-surface" type="date"/>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto">
+<button class="w-full bg-primary text-background font-label-caps py-3 rounded hover:opacity-90 transition-opacity">
+                        APPLY FILTERS
+                    </button>
+<button class="w-full mt-2 border border-white/10 font-label-caps py-2 rounded text-on-surface-variant hover:bg-white/5 transition-colors text-[10px]">
+                        RESET ALL
+                    </button>
+</div>
+</aside>
+<!-- Table and Detail Split -->
+<div class="flex-1 flex flex-col gap-6 overflow-hidden">
+<!-- Data Table Container -->
+<div class="flex-1 glass-panel rounded-xl overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-white/10 bg-white/5">
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant">PACKET ID</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant">TIMESTAMP (UTC)</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant">ORIGIN</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant">FINAL DESTINATION</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant">LATENCY</th>
+<th class="px-6 py-3 font-label-caps text-label-caps text-on-surface-variant">STATUS</th>
+</tr>
+</thead>
+<tbody class="font-data-mono text-[13px] divide-y divide-white/5">
+<!-- Row 1 -->
+<tr class="data-table-row cursor-pointer transition-colors bg-primary/5" onclick="selectRow(this)">
+<td class="px-6 py-4 text-primary font-bold">RR-098-X1</td>
+<td class="px-6 py-4 text-on-surface-variant">2024-05-12 14:22:01.002</td>
+<td class="px-6 py-4">Earth-OS-1</td>
+<td class="px-6 py-4">Europa-Station</td>
+<td class="px-6 py-4 text-secondary">32.41ms</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-2 text-success-green">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green glow-dot"></span>
+                                            SUCCESS
+                                        </span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="data-table-row cursor-pointer transition-colors" onclick="selectRow(this)">
+<td class="px-6 py-4 text-primary font-bold">RR-098-X2</td>
+<td class="px-6 py-4 text-on-surface-variant">2024-05-12 14:22:03.455</td>
+<td class="px-6 py-4">Mars-Prime</td>
+<td class="px-6 py-4">Titan-Outpost</td>
+<td class="px-6 py-4 text-warning-gold">894.12ms</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-2 text-warning-gold">
+<span class="w-1.5 h-1.5 rounded-full bg-warning-gold glow-dot"></span>
+                                            REROUTED
+                                        </span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="data-table-row cursor-pointer transition-colors" onclick="selectRow(this)">
+<td class="px-6 py-4 text-primary font-bold">RR-099-A0</td>
+<td class="px-6 py-4 text-on-surface-variant">2024-05-12 14:22:05.112</td>
+<td class="px-6 py-4">Moon-Alpha</td>
+<td class="px-6 py-4">Mars-Prime</td>
+<td class="px-6 py-4 text-on-surface-variant">---</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-2 text-danger-red">
+<span class="w-1.5 h-1.5 rounded-full bg-danger-red glow-dot"></span>
+                                            FAILURE
+                                        </span>
+</td>
+</tr>
+<!-- More data rows... -->
+<tr class="data-table-row cursor-pointer transition-colors" onclick="selectRow(this)">
+<td class="px-6 py-4 text-primary font-bold">RR-102-K9</td>
+<td class="px-6 py-4 text-on-surface-variant">2024-05-12 14:22:12.890</td>
+<td class="px-6 py-4">Venus-Cloud-6</td>
+<td class="px-6 py-4">Earth-OS-1</td>
+<td class="px-6 py-4 text-secondary">18.52ms</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-2 text-success-green">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green glow-dot"></span>
+                                            SUCCESS
+                                        </span>
+</td>
+</tr>
+<tr class="data-table-row cursor-pointer transition-colors" onclick="selectRow(this)">
+<td class="px-6 py-4 text-primary font-bold">RR-105-B2</td>
+<td class="px-6 py-4 text-on-surface-variant">2024-05-12 14:23:45.001</td>
+<td class="px-6 py-4">Mars-Prime</td>
+<td class="px-6 py-4">Luna-Relay</td>
+<td class="px-6 py-4 text-secondary">42.11ms</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-2 text-success-green">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green glow-dot"></span>
+                                            SUCCESS
+                                        </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Placeholder -->
+<div class="mt-auto border-t border-white/10 p-4 flex justify-between items-center bg-surface-container-low">
+<p class="font-data-mono text-[10px] text-on-surface-variant">PAGE 1 OF 240 (6,000 RECORDS)</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 border border-white/10 rounded text-[10px] font-label-caps hover:bg-white/5">PREV</button>
+<button class="px-3 py-1 bg-primary text-background rounded text-[10px] font-label-caps">NEXT</button>
+</div>
+</div>
+</div>
+<!-- Detailed Hop Breakdown Panel -->
+<div class="glass-panel rounded-xl p-6 h-64 flex flex-col shrink-0 animate-in slide-in-from-bottom duration-500" id="detail-panel">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1">Detailed Hop Breakdown</h4>
+<p class="font-data-mono text-[12px] text-on-surface-variant">Packet Trace ID: <span class="text-on-surface">RR-098-X1</span></p>
+</div>
+<div class="flex gap-4 items-center">
+<div class="text-right">
+<p class="font-label-caps text-[10px] text-on-surface-variant">TOTAL HOPS</p>
+<p class="font-data-mono text-lg text-secondary">04</p>
+</div>
+<button class="w-8 h-8 rounded border border-white/10 flex items-center justify-center hover:bg-white/5">
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Hop Visualization -->
+<div class="flex-1 flex items-center justify-between px-8 relative">
+<!-- Connecting Line -->
+<div class="absolute h-[1px] bg-white/10 top-1/2 left-16 right-16 -translate-y-1/2"></div>
+<div class="absolute h-[1px] bg-gradient-to-r from-primary to-secondary top-1/2 left-16 right-16 -translate-y-1/2 opacity-30"></div>
+<!-- Hop Node 1 -->
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container border-2 border-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">public</span>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-[10px] text-on-surface">EARTH-OS-1</p>
+<p class="font-data-mono text-[9px] text-on-surface-variant">Origin</p>
+</div>
+</div>
+<!-- Link 1-2 -->
+<div class="flex flex-col items-center">
+<p class="font-data-mono text-[10px] text-secondary mb-1">8.2ms</p>
+<div class="w-2 h-2 rounded-full bg-secondary glow-dot"></div>
+</div>
+<!-- Hop Node 2 -->
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container border border-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-xl">satellite_alt</span>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-[10px] text-on-surface">LUNA-RELAY</p>
+<p class="font-data-mono text-[9px] text-on-surface-variant">Intermediate</p>
+</div>
+</div>
+<!-- Link 2-3 -->
+<div class="flex flex-col items-center">
+<p class="font-data-mono text-[10px] text-secondary mb-1">12.5ms</p>
+<div class="w-2 h-2 rounded-full bg-secondary glow-dot"></div>
+</div>
+<!-- Hop Node 3 -->
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container border border-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-xl">hub</span>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-[10px] text-on-surface">MARS-GATE</p>
+<p class="font-data-mono text-[9px] text-on-surface-variant">Edge Switch</p>
+</div>
+</div>
+<!-- Link 3-4 -->
+<div class="flex flex-col items-center">
+<p class="font-data-mono text-[10px] text-secondary mb-1">11.7ms</p>
+<div class="w-2 h-2 rounded-full bg-secondary glow-dot"></div>
+</div>
+<!-- Hop Node 4 -->
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container border-2 border-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-xl" style="font-variation-settings: 'FILL' 1;">cloud_done</span>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-[10px] text-on-surface">EUROPA-STATION</p>
+<p class="font-data-mono text-[9px] text-on-surface-variant">Destination</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        function selectRow(el) {
+            // Remove active style from all rows
+            document.querySelectorAll('.data-table-row').forEach(row => {
+                row.classList.remove('bg-primary/5');
+            });
+            // Add active style to selected row
+            el.classList.add('bg-primary/5');
+            
+            // Visual feedback for panel "refreshing"
+            const panel = document.getElementById('detail-panel');
+            panel.style.opacity = '0.5';
+            setTimeout(() => {
+                panel.style.opacity = '1';
+                // In a real app, update the content of detail-panel here based on row data
+            }, 200);
+        }
+
+        // Add a micro-glow interaction on telemetry cards
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

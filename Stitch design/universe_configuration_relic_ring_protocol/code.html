@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Relic Ring Protocol | Universe Configuration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#303444",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#2c303f",
+                        "primary-fixed-dim": "#c5c0ff",
+                        "background": "#0f1321",
+                        "success-green": "#00D084",
+                        "secondary": "#7bd0ff",
+                        "surface-bright": "#353849",
+                        "surface-container": "#1b1f2e",
+                        "secondary-fixed-dim": "#7bd0ff",
+                        "primary-fixed": "#e4dfff",
+                        "on-primary-fixed": "#140067",
+                        "secondary-fixed": "#c4e7ff",
+                        "tertiary-container": "#b85d00",
+                        "tertiary": "#ffb785",
+                        "outline": "#928ea1",
+                        "on-secondary-fixed-variant": "#004c69",
+                        "on-secondary": "#00354a",
+                        "on-error": "#690005",
+                        "primary-container": "#6d5ef9",
+                        "surface-container-low": "#171b2a",
+                        "on-primary-container": "#ffffff",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#5543e0",
+                        "on-tertiary-fixed": "#301400",
+                        "on-primary-fixed-variant": "#3c21c8",
+                        "surface-dim": "#0f1321",
+                        "surface-container-high": "#262939",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#00374d",
+                        "surface-card": "#0B1020",
+                        "secondary-container": "#00a6e0",
+                        "surface-container-lowest": "#0a0d1c",
+                        "border-white": "rgba(255, 255, 255, 0.1)",
+                        "surface-variant": "#303444",
+                        "outline-variant": "#474555",
+                        "on-secondary-fixed": "#001e2c",
+                        "surface": "#0f1321",
+                        "surface-tint": "#c5c0ff",
+                        "on-tertiary-fixed-variant": "#713700",
+                        "on-background": "#dfe1f6",
+                        "tertiary-fixed-dim": "#ffb785",
+                        "on-surface-variant": "#c8c4d8",
+                        "warning-gold": "#FFB020",
+                        "on-tertiary": "#502500",
+                        "inverse-surface": "#dfe1f6",
+                        "on-surface": "#dfe1f6",
+                        "on-primary": "#2500a1",
+                        "danger-red": "#F04438",
+                        "primary": "#c5c0ff",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-tertiary-container": "#fffeff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "widget-padding": "24px",
+                        "gutter": "16px",
+                        "grid-margin": "32px",
+                        "compact-padding": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "data-mono": ["JetBrains Mono"],
+                        "display-lg": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "data-mono": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-caps": ["11px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0f1321;
+            color: #dfe1f6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(11, 16, 32, 0.4);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .micro-glow-hover:hover {
+            box-shadow: 0 0 20px rgba(197, 192, 255, 0.15);
+        }
+        .laser-border-glow {
+            border: 1px solid #7bd0ff20;
+            box-shadow: inset 0 0 10px #7bd0ff05;
+        }
+        .scanline {
+            background: linear-gradient(to bottom, transparent 50%, rgba(197, 192, 255, 0.02) 50%);
+            background-size: 100% 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(197, 192, 255, 0.3); }
+        
+        .universe-grid {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        @keyframes subtle-pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        .animate-pulse-slow { animation: subtle-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
+</head>
+<body class="font-body-md selection:bg-primary/30 selection:text-white">
+<!-- Global Background Elements -->
+<div class="fixed inset-0 pointer-events-none z-0">
+<div class="absolute inset-0 universe-grid opacity-20"></div>
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(109,94,249,0.05),transparent_70%)]"></div>
+
+</div>
+<!-- SideNavBar (Execution from JSON) -->
+<aside class="fixed left-0 top-0 bottom-0 z-[60] flex flex-col items-center py-6 overflow-hidden bg-surface-container-lowest/90 backdrop-blur-2xl border-r border-white-10 docked left-0 h-full w-16 hover:w-60 transition-all duration-300 group">
+<div class="flex items-center gap-4 px-4 w-full mb-10 overflow-hidden">
+<div class="w-8 h-8 flex-shrink-0 bg-primary/20 rounded flex items-center justify-center border border-primary/40">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">adjust</span>
+</div>
+<div class="flex flex-col whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="font-headline-sm text-primary font-bold tracking-tighter">RRP-CONTROL</span>
+<span class="font-label-caps text-[9px] text-outline">V2.0.4-BETA</span>
+</div>
+</div>
+<nav class="flex-1 w-full space-y-2 px-2 overflow-y-auto custom-scrollbar">
+<!-- Command -->
+<a class="flex items-center gap-4 p-3 rounded text-outline hover:text-on-surface hover:bg-white/5 transition-all group/item" href="#">
+<span class="material-symbols-outlined flex-shrink-0">terminal</span>
+<span class="font-label-caps opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all whitespace-nowrap">Command</span>
+</a>
+<!-- Telemetry -->
+<a class="flex items-center gap-4 p-3 rounded text-outline hover:text-on-surface hover:bg-white/5 transition-all group/item" href="#">
+<span class="material-symbols-outlined flex-shrink-0">insights</span>
+<span class="font-label-caps opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all whitespace-nowrap">Telemetry</span>
+</a>
+<!-- Universe (Active) -->
+<a class="flex items-center gap-4 p-3 rounded text-primary border-r-2 border-primary bg-primary/10 transition-all group/item" href="#">
+<span class="material-symbols-outlined flex-shrink-0" style="font-variation-settings: 'FILL' 1;">language</span>
+<span class="font-label-caps opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all whitespace-nowrap">Universe</span>
+</a>
+<!-- Network -->
+<a class="flex items-center gap-4 p-3 rounded text-outline hover:text-on-surface hover:bg-white/5 transition-all group/item" href="#">
+<span class="material-symbols-outlined flex-shrink-0">hub</span>
+<span class="font-label-caps opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all whitespace-nowrap">Network</span>
+</a>
+<!-- Archive -->
+<a class="flex items-center gap-4 p-3 rounded text-outline hover:text-on-surface hover:bg-white/5 transition-all group/item" href="#">
+<span class="material-symbols-outlined flex-shrink-0">history</span>
+<span class="font-label-caps opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all whitespace-nowrap">Archive</span>
+</a>
+</nav>
+<div class="w-full mt-auto pt-6 px-2 space-y-2 border-t border-white/5">
+<a class="flex items-center gap-4 p-3 rounded text-outline hover:text-on-surface hover:bg-white/5 transition-all group/item" href="#">
+<span class="material-symbols-outlined flex-shrink-0">help</span>
+<span class="font-label-caps opacity-0 group-hover:opacity-100 transition-all">Support</span>
+</a>
+<div class="px-2 py-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-full py-2 bg-primary-container text-on-primary-container font-label-caps rounded flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                    Deploy
+                </button>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-16 min-h-screen relative flex flex-col">
+<!-- TopNavBar (Execution from JSON) -->
+<header class="fixed top-0 right-0 left-16 z-50 flex items-center justify-between px-gutter h-16 bg-surface/80 backdrop-blur-xl border-b border-white-10 shadow-[0_0_20px_rgba(197,192,255,0.1)]">
+<div class="flex items-center gap-6">
+<h1 class="font-headline-sm text-primary font-bold tracking-tighter uppercase">RELIC RING PROTOCOL</h1>
+<div class="hidden md:flex items-center bg-surface-container-low border border-white/10 rounded-full px-3 py-1 gap-2">
+<span class="material-symbols-outlined text-outline text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-48 font-data-mono" placeholder="Search universe parameters..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:bg-white/5 transition-colors rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-danger-red rounded-full"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-white/5 transition-colors rounded-full">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="ml-2 w-8 h-8 rounded-full border border-primary/40 bg-primary/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional close-up headshot of a technical system administrator, futuristic aesthetic, subtle blue rim lighting on their face, high-tech background with blurred data screens, ultra-sharp focus, cinematic lighting, 8k resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkZjAEk2--1_FaQUaKB_35ezE2EPPX9eRiefVepQfWXTgC8nUnkIv0WePhxnG4Na3JVlph2JfrMakRAz3M0TOQbq-HUHrdb2sT28MRqLBVznLh7rRvTtJCvIcJbWVhzUEdkDekPoa_SCL70NU32QJosasvXuCauKS6qE9iPYBP2SR4PUU9fHFaU3SH0IXSs9qGaC6IoFvHdjui8BX7GgAild7nFM_XJ8ep6Jpb7rtZS41rgh2zawq2DnsZMZIttku4oVJjCgfDilqZ"/>
+</div>
+</div>
+</header>
+<div class="mt-16 p-grid-margin flex-1">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-success-green animate-pulse"></span>
+<span class="font-label-caps text-success-green">Simulation Live</span>
+</div>
+<h2 class="font-display-lg text-on-surface">Universe Configuration</h2>
+<p class="text-on-surface-variant font-body-md max-w-xl">Central kernel parameters for the local relativistic simulation. Modifications to these constants require Class-A clearance and system reboot.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2.5 rounded border border-outline/30 font-label-caps text-on-surface hover:bg-white/5 transition-all">Revert Config</button>
+<button class="px-6 py-2.5 rounded bg-primary-container text-on-primary-container font-label-caps hover:brightness-110 shadow-[0_0_20px_rgba(109,94,249,0.3)] transition-all">Apply Changes</button>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- 1. Global Universal Constants (4 cols) -->
+<section class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+<div class="glass-panel p-widget-padding rounded-xl micro-glow-hover flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-label-caps text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">stars</span>
+                                Fundamental Constants
+                            </h3>
+<span class="font-data-mono text-[10px] text-outline">READ-ONLY</span>
+</div>
+<div class="space-y-6">
+<div class="border-l-2 border-primary/20 pl-4 py-1">
+<div class="text-outline font-label-caps text-[10px] mb-1">Speed of Light (C)</div>
+<div class="flex items-baseline gap-2">
+<span class="font-data-mono text-2xl text-on-surface">2.00392</span>
+<span class="font-data-mono text-outline text-xs uppercase">AU/ms</span>
+</div>
+</div>
+<div class="border-l-2 border-primary/20 pl-4 py-1">
+<div class="text-outline font-label-caps text-[10px] mb-1">Vacuum Refraction Index</div>
+<div class="flex items-baseline gap-2">
+<span class="font-data-mono text-2xl text-on-surface">1.000000</span>
+<span class="font-data-mono text-outline text-xs uppercase">μ</span>
+</div>
+</div>
+<div class="border-l-2 border-primary/20 pl-4 py-1">
+<div class="text-outline font-label-caps text-[10px] mb-1">Gravitational Redshift Baseline</div>
+<div class="flex items-baseline gap-2">
+<span class="font-data-mono text-2xl text-warning-gold">4.22e-12</span>
+<span class="font-data-mono text-outline text-xs uppercase">Z</span>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-white/10">
+<div class="text-outline font-body-sm italic">
+                                "Spacetime stability is within nominal 0.002% margin of error."
+                            </div>
+</div>
+</div>
+<!-- 4. Environment Variables -->
+<div class="glass-panel p-widget-padding rounded-xl micro-glow-hover flex flex-col">
+<h3 class="font-label-caps text-secondary flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-sm">landscape</span>
+                            Env Parameters
+                        </h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-[10px] font-label-caps mb-2">
+<span class="text-on-surface-variant">Solar Flare Intensity</span>
+<span class="text-warning-gold">Moderate (64%)</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-warning-gold w-[64%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-label-caps mb-2">
+<span class="text-on-surface-variant">Asteroid Field Density</span>
+<span class="text-success-green">Low (12%)</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-success-green w-[12%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-label-caps mb-2">
+<span class="text-on-surface-variant">Void Transit Multiplier</span>
+<span class="text-primary">1.4x</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[70%] shadow-[0_0_8px_#6d5ef9]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. Hardware Specs & Delays (8 cols) -->
+<section class="col-span-12 lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="col-span-1 md:col-span-2 glass-panel p-widget-padding rounded-xl micro-glow-hover">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-label-caps text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">memory</span>
+                                Propagation &amp; Latency Metrics
+                            </h3>
+<button class="text-primary font-label-caps text-[10px] hover:underline">Calibrate All</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="p-4 bg-surface-container-low rounded border border-white/5 laser-border-glow">
+<div class="text-outline font-label-caps text-[9px] mb-2">Tower Processing</div>
+<div class="font-data-mono text-xl text-primary">7.42ms</div>
+<div class="text-[10px] text-success-green mt-1">±0.01ms Delta</div>
+</div>
+<div class="p-4 bg-surface-container-low rounded border border-white/5 laser-border-glow">
+<div class="text-outline font-label-caps text-[9px] mb-2">Laser Attenuation</div>
+<div class="font-data-mono text-xl text-on-surface">0.18 <span class="text-sm">dB/km</span></div>
+<div class="text-[10px] text-on-surface-variant mt-1">Nominal Range</div>
+</div>
+<div class="p-4 bg-surface-container-low rounded border border-white/5 laser-border-glow">
+<div class="text-outline font-label-caps text-[9px] mb-2">Uplink Buffering</div>
+<div class="font-data-mono text-xl text-warning-gold">1,024 <span class="text-sm">KB</span></div>
+<div class="text-[10px] text-outline mt-1">82% Capacity</div>
+</div>
+</div>
+</div>
+<!-- 3. Planetary Codex Mapping -->
+<div class="col-span-1 md:col-span-1 glass-panel rounded-xl overflow-hidden flex flex-col">
+<div class="p-widget-padding border-b border-white/10 bg-white/5">
+<h3 class="font-label-caps text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">public</span>
+                                Planetary Codex
+                            </h3>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low sticky top-0">
+<tr class="font-label-caps text-[9px] text-outline">
+<th class="p-4 border-b border-white/5">System Name</th>
+<th class="p-4 border-b border-white/5">Base Conv</th>
+<th class="p-4 border-b border-white/5">Sync</th>
+</tr>
+</thead>
+<tbody class="font-data-mono text-xs">
+<tr class="hover:bg-white/5 group">
+<td class="p-4 text-on-surface">AEGIS PRIME</td>
+<td class="p-4 text-secondary">BASE-8</td>
+<td class="p-4"><span class="w-1.5 h-1.5 rounded-full bg-success-green inline-block"></span></td>
+</tr>
+<tr class="hover:bg-white/5 group border-t border-white/5">
+<td class="p-4 text-on-surface">CAELUM-IV</td>
+<td class="p-4 text-secondary">BASE-5</td>
+<td class="p-4"><span class="w-1.5 h-1.5 rounded-full bg-success-green inline-block"></span></td>
+</tr>
+<tr class="hover:bg-white/5 group border-t border-white/5">
+<td class="p-4 text-on-surface">EARTH (TERRA)</td>
+<td class="p-4 text-secondary">BASE-10</td>
+<td class="p-4"><span class="w-1.5 h-1.5 rounded-full bg-success-green inline-block"></span></td>
+</tr>
+<tr class="hover:bg-white/5 group border-t border-white/5">
+<td class="p-4 text-on-surface">VOID-NULL</td>
+<td class="p-4 text-danger-red">BASE-HEX</td>
+<td class="p-4"><span class="w-1.5 h-1.5 rounded-full bg-danger-red inline-block"></span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Visual Asset Placeholder (Radar/Visualizer) -->
+<div class="col-span-1 md:col-span-1 glass-panel rounded-xl overflow-hidden relative group">
+
+<div class="absolute inset-0 scanline pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-surface-card to-transparent">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[9px] text-outline">Pulse Visualization</span>
+<span class="font-data-mono text-[9px] text-success-green">ACTIVE-STABLE</span>
+</div>
+</div>
+</div>
+<!-- 5. Raw Config View -->
+<div class="col-span-1 md:col-span-2 glass-panel rounded-xl overflow-hidden flex flex-col">
+<div class="p-4 border-b border-white/10 flex items-center justify-between bg-surface-container-high">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-sm text-outline">code</span>
+<span class="font-label-caps text-[10px] text-on-surface">universe-config.json</span>
+</div>
+<div class="flex gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-white/10"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-white/10"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-white/10"></div>
+</div>
+</div>
+<div class="p-6 bg-[#050816] font-data-mono text-xs leading-relaxed overflow-x-auto custom-scrollbar h-64">
+<pre class="text-[#89ddff]"><span class="text-outline">{</span>
+  <span class="text-[#c5c0ff]">"universe_id"</span>: <span class="text-warning-gold">"RRP-OMEGA-09"</span>,
+  <span class="text-[#c5c0ff]">"constants"</span>: {
+    <span class="text-[#c5c0ff]">"c"</span>: <span class="text-[#ffb785]">2.00392</span>,
+    <span class="text-[#c5c0ff]">"refraction_index"</span>: <span class="text-[#ffb785]">1.0000</span>,
+    <span class="text-[#c5c0ff]">"redshift_base"</span>: <span class="text-warning-gold">"4.22e-12"</span>
+  },
+  <span class="text-[#c5c0ff]">"hardware"</span>: {
+    <span class="text-[#c5c0ff]">"tower_delay"</span>: <span class="text-success-green">7.42</span>,
+    <span class="text-[#c5c0ff]">"attenuation_db"</span>: <span class="text-success-green">0.18</span>,
+    <span class="text-[#c5c0ff]">"buffer_cap"</span>: <span class="text-[#ffb785]">1024</span>
+  },
+  <span class="text-[#c5c0ff]">"mappings"</span>: [
+    { <span class="text-[#c5c0ff]">"id"</span>: <span class="text-warning-gold">"Aegis"</span>, <span class="text-[#c5c0ff]">"base"</span>: <span class="text-[#ffb785]">8</span> },
+    { <span class="text-[#c5c0ff]">"id"</span>: <span class="text-warning-gold">"Caelum"</span>, <span class="text-[#c5c0ff]">"base"</span>: <span class="text-[#ffb785]">5</span> },
+    { <span class="text-[#c5c0ff]">"id"</span>: <span class="text-warning-gold">"Terra"</span>, <span class="text-[#c5c0ff]">"base"</span>: <span class="text-[#ffb785]">10</span> }
+  ],
+  <span class="text-[#c5c0ff]">"status"</span>: <span class="text-success-green">"LOCKED"</span>
+<span class="text-outline">}</span></pre>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Stats -->
+<footer class="mt-8 pt-6 border-t border-white/5 flex flex-wrap items-center justify-between gap-6">
+<div class="flex gap-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center border border-white/10">
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<div>
+<div class="text-[9px] font-label-caps text-outline">Compute Load</div>
+<div class="font-data-mono text-sm text-on-surface">32.4 PFLOPS</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center border border-white/10">
+<span class="material-symbols-outlined text-secondary">database</span>
+</div>
+<div>
+<div class="text-[9px] font-label-caps text-outline">Config Revision</div>
+<div class="font-data-mono text-sm text-on-surface">REV-882-C</div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 text-outline font-data-mono text-[10px]">
+<span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-success-green"></span> NODE-01: READY</span>
+<span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-success-green"></span> NODE-02: READY</span>
+<span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-warning-gold"></span> NODE-03: SYNCING</span>
+</div>
+</footer>
+</div>
+</main>
+<script>
+        // Micro-interaction for hover states and button feedback
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('scale-95');
+            });</script></body></html>
